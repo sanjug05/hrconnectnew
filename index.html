@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR Connect | Greeting Studio v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --P: #0B3D2E; --PD: #082d22; --G: #b88a2d; --GL: #d4a843;
+  --cream: #fdfbf6; --dark-bg: #0a1628; --tx: #1a1a1a; --txm: #5a6070;
+  --app-bg: #051a14; --r: 10px; --ease: cubic-bezier(.4,0,.2,1);
+  --shadow: 0 25px 60px -10px rgba(0,0,0,.5);
+}
+.th-blue  { --P:#1a237e; --PD:#0d1757; --G:#e5a530; --GL:#ffc107; --app-bg:#08102e; --dark-bg:#050e22; }
+.th-plum  { --P:#4a0072; --PD:#38005a; --G:#ce93d8; --GL:#f48fb1; --app-bg:#1a0030; --dark-bg:#0d0018; }
+
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Montserrat',sans-serif;background:var(--app-bg);color:#fff;min-height:100vh;overflow-x:hidden;}
+
+.shell{display:grid;grid-template-columns:370px 1fr;min-height:100vh;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  background:var(--P);padding:24px 22px;
+  border-right:1px solid rgba(184,138,45,.18);
+  display:flex;flex-direction:column;gap:14px;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:rgba(184,138,45,.25) transparent;
+}
+.sidebar::-webkit-scrollbar{width:3px;}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(184,138,45,.3);border-radius:2px;}
+
+.brand{text-align:center;}
+.brand img{max-width:130px;height:auto;margin:0 auto 8px;display:block;}
+.brand-name{font-family:'Playfair Display',serif;font-size:20px;color:var(--G);letter-spacing:2px;text-transform:uppercase;}
+.brand-sub{font-size:9px;text-transform:uppercase;letter-spacing:3px;opacity:.55;margin-top:3px;}
+.logo-hint{font-size:9px;color:rgba(184,138,45,.45);text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:4px;display:inline-block;}
+.logo-hint:hover{color:var(--G);}
+
+/* theme picker */
+.theme-row{display:flex;gap:8px;justify-content:center;}
+.tdot{width:20px;height:20px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:.2s;}
+.tdot:hover,.tdot.on{border-color:#fff;}
+.tdot.t0{background:linear-gradient(135deg,#0B3D2E,#b88a2d);}
+.tdot.t1{background:linear-gradient(135deg,#1a237e,#e5a530);}
+.tdot.t2{background:linear-gradient(135deg,#4a0072,#ce93d8);}
+
+.fgrp{display:flex;flex-direction:column;gap:5px;}
+label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--GL);}
+.ic{
+  background:rgba(255,255,255,.06);border:1px solid rgba(184,138,45,.28);
+  padding:9px 13px;border-radius:8px;color:#fff;font-family:inherit;
+  outline:none;transition:.25s;font-size:13px;width:100%;
+}
+.ic:focus{border-color:var(--G);background:rgba(255,255,255,.1);}
+textarea.ic{resize:none;}
+select.ic optgroup{color:var(--G);background:var(--PD);font-style:normal;font-weight:700;}
+select.ic option{background:var(--PD);color:#fff;}
+.ctr{font-size:10px;color:rgba(255,255,255,.3);text-align:right;margin-top:-3px;}
+
+/* name row */
+.nrow{display:flex;gap:6px;align-items:center;}
+.nrow .ic{flex:1;}
+.ibtn{
+  width:34px;height:34px;border-radius:8px;
+  border:1px solid rgba(184,138,45,.35);background:rgba(255,255,255,.05);
+  color:var(--G);cursor:pointer;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;transition:.2s;
+}
+.ibtn:hover{background:rgba(184,138,45,.2);}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;}
+.chip{
+  background:rgba(255,255,255,.06);border:1px solid rgba(184,138,45,.22);
+  padding:3px 10px;border-radius:20px;font-size:11px;cursor:pointer;
+  transition:.2s;display:flex;align-items:center;gap:5px;
+}
+.chip:hover{background:rgba(184,138,45,.2);border-color:var(--G);}
+.chip-x{opacity:.35;font-size:9px;}
+.chip-x:hover{opacity:1;color:#e74c3c;}
+
+/* buttons */
+.bstack{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.bfull{grid-column:1/-1;}
+.btn{
+  padding:10px 12px;border-radius:8px;border:none;cursor:pointer;
+  font-weight:700;text-transform:uppercase;letter-spacing:1px;font-size:11px;
+  transition:.25s var(--ease);display:flex;align-items:center;justify-content:center;gap:7px;
+}
+.btn-p{background:var(--G);color:var(--PD);}
+.btn-p:hover:not(:disabled){background:var(--GL);transform:translateY(-1px);}
+.btn-s{background:transparent;border:1px solid rgba(184,138,45,.45);color:var(--G);}
+.btn-s:hover:not(:disabled){background:rgba(184,138,45,.15);}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-wa:hover:not(:disabled){background:#1eba58;}
+.btn:disabled{opacity:.3;pointer-events:none;}
+
+.divider{height:1px;background:rgba(255,255,255,.08);margin:2px 0;}
+
+/* history */
+.sec-hd{display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+.sec-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--GL);}
+.hlist{display:none;flex-direction:column;gap:5px;margin-top:8px;}
+.hlist.open{display:flex;}
+.hi{
+  background:rgba(255,255,255,.03);padding:7px 10px;border-radius:6px;
+  font-size:11px;cursor:pointer;transition:.2s;border:1px solid transparent;
+}
+.hi:hover{background:rgba(255,255,255,.08);border-color:rgba(184,138,45,.28);}
+.hn{font-weight:600;color:var(--G);font-size:12px;}
+.ht{opacity:.45;font-size:10px;}
+
+/* ── MAIN ── */
+.main{
+  padding:50px 40px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:radial-gradient(circle at 50% 35%,rgba(11,61,46,.35) 0%,var(--app-bg) 65%);
+  min-height:100vh;
+}
+#stage{width:100%;display:flex;align-items:center;justify-content:center;}
+
+/* ── CARD ── */
+#card{
+  width:min(720px,100%);height:500px;
+  background:var(--cream);display:flex;flex-direction:row;
+  border-radius:6px;overflow:hidden;
+  box-shadow:var(--shadow);position:relative;
+  color:var(--tx);border:2.5px solid var(--G);
+  outline:2px solid rgba(184,138,45,.18);outline-offset:4px;
+}
+.cv{width:42%;position:relative;overflow:hidden;background:var(--PD);flex-shrink:0;}
+.cv svg{width:100%;height:100%;display:block;position:absolute;top:0;left:0;}
+.cv-ov{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.08),transparent);pointer-events:none;z-index:1;}
+
+.cc{
+  flex:1;padding:28px 38px 52px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  position:relative;background:var(--cream);overflow:hidden;
+}
+.cc::before{
+  content:'';position:absolute;top:14px;bottom:14px;left:14px;right:14px;
+  border:1px solid rgba(11,61,46,.05);pointer-events:none;
+}
+.chr{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1;}
+.clogo{height:100px;width:auto;max-width:150px;object-fit:contain;}
+.chm{text-align:right;}
+.csub{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txm);}
+.cline{height:2px;width:48px;background:var(--G);margin-left:auto;margin-top:4px;}
+.ctag{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:4px;color:var(--G);position:relative;z-index:1;}
+.crcp{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--txm);margin-bottom:2px;position:relative;z-index:1;}
+.ctitle{font-family:'Playfair Display',serif;font-size:25px;line-height:1.2;color:#0B3D2E;position:relative;z-index:1;margin-bottom:9px;}
+.cmsg{font-family:'Cormorant Garamond',serif;font-size:13.5px;line-height:1.58;color:var(--txm);font-style:italic;position:relative;z-index:1;}
+.csig{border-top:1.5px solid rgba(184,138,45,.28);padding-top:9px;position:relative;z-index:1;}
+.csig-n{font-weight:700;font-size:11px;color:#0B3D2E;text-transform:uppercase;}
+.csig-d{font-size:8px;letter-spacing:1px;color:var(--G);font-weight:600;margin-top:2px;}
+
+/* stamp */
+.stamp{
+  position:absolute;bottom:38px;right:18px;
+  width:62px;height:62px;border:2.5px solid var(--G);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  text-align:center;font-size:7px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.8px;color:var(--G);transform:rotate(-12deg);
+  z-index:3;background:rgba(253,251,246,.88);
+}
+.stamp::before{content:'';position:absolute;inset:4px;border:1px solid rgba(184,138,45,.3);border-radius:50%;}
+.stamp-inner{line-height:1.25;text-align:center;font-size:6.5px;}
+
+/* footer */
+.cfoot{
+  position:absolute;bottom:0;left:0;width:100%;
+  background:#0a1628;color:var(--G);
+  padding:7px 20px;text-align:center;
+  font-size:9px;letter-spacing:2px;font-weight:500;
+  border-top:1.5px solid var(--G);z-index:5;
+  display:flex;align-items:center;justify-content:center;gap:0;
+}
+
+.empty{text-align:center;opacity:.35;font-size:14px;letter-spacing:1px;}
+
+/* loader */
+.loader{
+  position:fixed;inset:0;background:rgba(11,61,46,.93);
+  display:none;align-items:center;justify-content:center;
+  z-index:1000;flex-direction:column;gap:14px;
+}
+.loader.on{display:flex;}
+.loader p{font-size:10px;letter-spacing:3px;opacity:.65;}
+
+/* toast */
+.toast{
+  position:fixed;bottom:24px;right:24px;background:var(--PD);color:#fff;
+  padding:11px 18px;border-radius:8px;border:1px solid var(--G);
+  z-index:2000;transform:translateY(90px);opacity:0;
+  transition:all .3s ease;font-size:12px;letter-spacing:.4px;max-width:270px;
+}
+.toast.on{transform:translateY(0);opacity:1;}
+.toast.err{border-color:#e74c3c;background:#2c0808;}
+
+/* progress */
+.prog-wrap{width:200px;height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;}
+.prog-bar{height:100%;width:0%;background:var(--G);transition:width .3s;}
+
+@media(max-width:900px){
+  .shell{grid-template-columns:1fr;}
+  .sidebar{height:auto;position:static;overflow-y:visible;}
+  .main{padding:30px 20px;min-height:auto;}
+}
+@media(max-width:600px){
+  #card{flex-direction:column;height:auto;}
+  .cv{width:100%;height:180px;}
+  .cc{padding:20px 20px 52px;}
+  .ctitle{font-size:20px;}
+}
+@media print{
+  .sidebar,.loader,.toast{display:none!important;}
+  body{background:#fff!important;}
+  .main{padding:0;background:white!important;display:block;}
+  #card{
+    width:720px!important;height:500px!important;
+    box-shadow:none!important;margin:0 auto;
+    display:flex!important;flex-direction:row!important;
+    border:2.5px solid #b88a2d!important;
+    page-break-inside:avoid;
+  }
+  .cfoot,-webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+
+/* ── Birthday Multiple – sidebar person blocks ── */
+#grpBdayPersons{display:flex;flex-direction:column;gap:10px;}
+.bp-block{background:rgba(255,255,255,.04);border:1px solid rgba(184,138,45,.22);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;}
+.bp-hd{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--GL);}
+.bp-photo-wrap{position:relative;width:100%;height:70px;background:rgba(255,255,255,.04);border:1.5px dashed rgba(184,138,45,.3);border-radius:8px;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,.3);transition:.2s;}
+.bp-photo-wrap:hover{border-color:var(--G);color:var(--G);}
+.bp-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;}
+.bp-photo-wrap.has-img .bp-img{display:block;}
+.bp-photo-wrap.has-img .bp-placeholder{display:none;}
+.bp-upload-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2;}
+.bp-clear{position:absolute;top:4px;right:4px;background:rgba(231,76,60,.88);color:#fff;border:none;border-radius:4px;width:20px;height:20px;cursor:pointer;font-size:10px;display:none;align-items:center;justify-content:center;z-index:3;line-height:1;padding:0;}
+.bp-photo-wrap.has-img .bp-clear{display:flex;}
+</style>
+</head>
+<body>
+
+<div class="shell" id="shell">
+  <aside class="sidebar">
+
+    <!-- Brand -->
+    <div class="brand">
+      <img id="blogo" src="" alt="Logo" onerror="this.style.display='none'" style="display:none">
+      <div class="brand-name">HR Connect</div>
+      <div class="brand-sub">People & Culture Studio</div>
+      <label for="logoFile" class="logo-hint"><i class="fas fa-upload" style="font-size:8px"></i> Upload Logo</label>
+      <input type="file" id="logoFile" accept="image/*" style="display:none">
+    </div>
+
+    <!-- Theme -->
+    <div class="fgrp">
+      <label>Theme</label>
+      <div class="theme-row">
+        <div class="tdot t0 on" data-th="" title="Classic Green"></div>
+        <div class="tdot t1" data-th="th-blue" title="Royal Blue"></div>
+        <div class="tdot t2" data-th="th-plum" title="Deep Plum"></div>
+      </div>
+    </div>
+
+    <!-- Occasion -->
+    <div class="fgrp">
+      <label for="fOcc">Occasion</label>
+      <select class="ic" id="fOcc">
+        <optgroup label="Employee Personal">
+          <option value="birthday" selected>Birthday Wishes</option>
+          <option value="workAnniversary">Work Anniversary</option>
+          <option value="weddingAnniversary">Wedding Anniversary</option>
+          <option value="marriage">Marriage Congratulations</option>
+          <option value="newBaby">New Baby / Parenthood</option>
+          <option value="housewarming">Housewarming</option>
+          <option value="promotion">Promotion Congratulations</option>
+          <option value="certification">Certification / Achievement</option>
+          <option value="retirement">Retirement Wishes</option>
+          <option value="farewell">Farewell Message</option>
+          <option value="welcome">Joining Day / Welcome</option>
+        </optgroup>
+        <optgroup label="Festivals & Cultural">
+          <option value="newYear">New Year</option>
+          <option value="diwali">Diwali</option>
+          <option value="holi">Holi</option>
+          <option value="eid">Eid-ul-Fitr</option>
+          <option value="christmas">Christmas</option>
+          <option value="gurpurab">Gurpurab</option>
+          <option value="navratri">Navratri / Dussehra</option>
+          <option value="ganeshChaturthi">Ganesh Chaturthi</option>
+          <option value="rakshaBandhan">Raksha Bandhan</option>
+          <option value="independenceDay">Independence Day</option>
+          <option value="republicDay">Republic Day</option>
+          <option value="harvestFestival">Lohri / Pongal / Sankranti</option>
+          <option value="onam">Onam</option>
+          <option value="baisakhi">Baisakhi</option>
+          <option value="janmashtami">Janmashtami</option>
+          <option value="buddhaPurnima">Buddha Purnima</option>
+          <option value="easter">Good Friday / Easter</option>
+          <option value="yogaDay">International Yoga Day</option>
+        </optgroup>
+        <optgroup label="Appreciation & Awards">
+          <option value="employeeMonth">Employee of the Month</option>
+          <option value="starPerformer">Star Performer</option>
+          <option value="teamAchievement">Team Achievement</option>
+          <option value="salesMilestone">Sales Milestone</option>
+          <option value="targetAchieved">Target Achievement</option>
+          <option value="leadership">Leadership Appreciation</option>
+          <option value="thankYou">Thank You Message</option>
+          <option value="quarterlyAward">Quarterly Performance Award</option>
+          <option value="annualAward">Annual Awards</option>
+        </optgroup>
+        <optgroup label="Health & Wellbeing">
+          <option value="getWell">Get Well Soon</option>
+          <option value="mentalHealth">Mental Health Awareness</option>
+          <option value="worldHealth">World Health Day</option>
+          <option value="fitnessChallenge">Fitness Challenge Launch</option>
+          <option value="bloodDonation">Blood Donation Camp</option>
+          <option value="wellnessReminder">Wellness Reminder</option>
+        </optgroup>
+        <optgroup label="Corporate & Engagement">
+          <option value="mondayMotivation">Monday Motivation</option>
+          <option value="fridaySignoff">Friday Sign-off</option>
+          <option value="fyClosing">Financial Year Closing</option>
+          <option value="foundationDay">Company Foundation Day</option>
+          <option value="townhall">Townhall Invitation</option>
+          <option value="training">Training Announcement</option>
+          <option value="policyUpdate">Policy Communication</option>
+          <option value="safety">Safety Awareness</option>
+          <option value="teamOuting">Team Outing / Annual Party</option>
+          <option value="funFriday">Fun Friday Activities</option>
+          <option value="contest">Quiz / Contest Launch</option>
+        </optgroup>
+        <optgroup label="Diversity & Inclusion">
+          <option value="womensDay">International Women's Day</option>
+          <option value="mensDay">Men's Day</option>
+          <option value="pride">Pride Month</option>
+          <option value="mothersDay">Mother's Day</option>
+          <option value="fathersDay">Father's Day</option>
+        </optgroup>
+        <optgroup label="Sensitive Situations">
+          <option value="condolence">Condolence Message</option>
+          <option value="bereavement">Bereavement Support</option>
+          <option value="crisis">Crisis / Disaster Support</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <!-- Years (work anniversary only) -->
+    <div class="fgrp" id="grpYrs" style="display:none">
+      <label for="fYrs">Years Completed</label>
+      <input type="number" id="fYrs" class="ic" min="1" max="50" value="1">
+    </div>
+
+    <!-- Birthday Multiple (birthday occasion only) -->
+    <div class="fgrp" id="grpBdayMult" style="display:none">
+      <label for="fBdayMult"><i class="fas fa-users" style="font-size:9px;margin-right:4px"></i>Birthday Multiple</label>
+      <select class="ic" id="fBdayMult">
+        <option value="1">Single Birthday</option>
+        <option value="2">2 Birthdays</option>
+        <option value="3">3 Birthdays</option>
+        <option value="4">4 Birthdays</option>
+        <option value="5">5 Birthdays</option>
+      </select>
+    </div>
+    <div id="grpBdayPersons"></div>
+
+    <!-- Recipient -->
+    <div class="fgrp">
+      <label>Recipient Name</label>
+      <div class="nrow">
+        <input type="text" class="ic" id="fName" placeholder="Enter name…" value="Team Member" maxlength="40" autocomplete="off">
+        <button class="ibtn" id="btnSave" title="Save name to quick list"><i class="fas fa-bookmark" style="font-size:11px"></i></button>
+      </div>
+      <div id="ctr" class="ctr">11 / 40</div>
+      <div class="chips" id="chips"></div>
+    </div>
+
+    <!-- From -->
+    <div class="fgrp">
+      <label for="fFrom">From / Sender</label>
+      <input type="text" class="ic" id="fFrom" value="People & Culture Team" autocomplete="off">
+    </div>
+
+    <!-- Tone -->
+    <div class="fgrp">
+      <label for="fTone">Message Tone</label>
+      <select class="ic" id="fTone">
+        <option value="Formal">Formal & Professional</option>
+        <option value="Warm">Warm & Personal</option>
+        <option value="Celebratory">Celebratory & Energetic</option>
+      </select>
+    </div>
+
+    <!-- Custom Message -->
+    <div class="fgrp">
+      <label for="fMsg">Custom Message <span style="opacity:.5;font-size:9px">(optional)</span></label>
+      <textarea class="ic" id="fMsg" rows="3" placeholder="Leave blank to use auto-generated message…"></textarea>
+    </div>
+
+    <!-- Buttons -->
+    <div class="bstack">
+      <button class="btn btn-p bfull" id="btnGen"><i class="fas fa-magic"></i> Generate Preview</button>
+      <button class="btn btn-s" id="btnPNG" disabled><i class="fas fa-download"></i> Export PNG</button>
+      <button class="btn btn-s" id="btnClip" disabled><i class="fas fa-copy"></i> Copy Image</button>
+      <button class="btn btn-s" id="btnPrint" disabled><i class="fas fa-print"></i> Print / PDF</button>
+      <button class="btn btn-wa bfull" id="btnWA"><i class="fab fa-whatsapp"></i> Share via WhatsApp</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- History -->
+    <div>
+      <div class="sec-hd" id="togHist">
+        <span class="sec-lbl"><i class="fas fa-history" style="margin-right:5px;font-size:9px"></i>Recent Cards</span>
+        <i class="fas fa-chevron-down" id="histChev" style="font-size:9px;opacity:.5"></i>
+      </div>
+      <div class="hlist" id="hlist"></div>
+      <button id="btnClrHist" class="btn btn-s bfull" style="display:none;margin-top:8px;font-size:10px;padding:6px">
+        <i class="fas fa-trash" style="font-size:10px"></i> Clear History
+      </button>
+    </div>
+
+    <div style="margin-top:auto;font-size:10px;opacity:.37;text-align:center;padding-top:14px;line-height:1.9">
+      Transforming Experiences • Sanju G.<br>
+      <span style="opacity:.6">HR Connect V5.0</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div id="stage">
+      <div class="empty">
+        <i class="fas fa-gem" style="font-size:38px;opacity:.3;display:block;margin-bottom:14px"></i>
+        Select an occasion and click <strong>Generate Preview</strong>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="loader" id="loader">
+  <i class="fas fa-circle-notch fa-spin" style="font-size:28px;color:var(--G)"></i>
+  <div class="prog-wrap"><div class="prog-bar" id="progBar"></div></div>
+  <p id="loaderMsg">PREPARING DESIGN…</p>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ========================================================
+   SVG VISUAL LIBRARY — all inline, no external images
+   No CORS issues, always occasion-relevant
+   ======================================================== */
+const V = {
+
+birthday:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".7" y2="1">
+<stop offset="0%" stop-color="#f06292"/><stop offset="50%" stop-color="#ab47bc"/><stop offset="100%" stop-color="#7e57c2"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<ellipse cx="70" cy="163" rx="31" ry="41" fill="rgba(255,182,193,.32)" stroke="rgba(255,255,255,.28)" stroke-width="1.2"/>
+<ellipse cx="147" cy="127" rx="31" ry="41" fill="rgba(255,255,153,.28)" stroke="rgba(255,255,255,.28)" stroke-width="1.2"/>
+<ellipse cx="224" cy="163" rx="31" ry="41" fill="rgba(135,206,250,.28)" stroke="rgba(255,255,255,.28)" stroke-width="1.2"/>
+<path d="M70 204C65 228 72 252 68 272" stroke="rgba(255,255,255,.35)" stroke-width="1.2" fill="none"/>
+<path d="M147 168C142 192 149 216 145 236" stroke="rgba(255,255,255,.35)" stroke-width="1.2" fill="none"/>
+<path d="M224 204C229 228 222 252 226 272" stroke="rgba(255,255,255,.35)" stroke-width="1.2" fill="none"/>
+<rect x="27" y="57" width="7" height="7" rx="1" fill="rgba(255,235,59,.55)" transform="rotate(30 30 60)"/>
+<rect x="196" y="47" width="6" height="6" rx="1" fill="rgba(255,255,255,.45)" transform="rotate(-20 199 50)"/>
+<rect x="248" y="117" width="7" height="7" rx="1" fill="rgba(255,182,193,.5)" transform="rotate(45 251 120)"/>
+<circle cx="38" cy="98" r="4" fill="rgba(255,255,255,.22)"/>
+<circle cx="258" cy="78" r="3" fill="rgba(255,235,59,.35)"/>
+<circle cx="14" cy="198" r="5" fill="rgba(255,255,255,.14)"/>
+<circle cx="276" cy="298" r="4" fill="rgba(255,182,193,.28)"/>
+<polygon points="147,330 153,348 172,348 157,358 163,377 147,367 131,377 137,358 122,348 141,348" fill="rgba(255,255,255,.13)"/>
+<path d="M0 445Q147 408 294 445L294 500 0 500Z" fill="rgba(0,0,0,.1)"/>
+</svg>`,
+
+work_anniversary:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".6" y2="1">
+<stop offset="0%" stop-color="#1a237e"/><stop offset="60%" stop-color="#283593"/><stop offset="100%" stop-color="#4527a0"/>
+</linearGradient>
+<linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+<stop offset="0%" stop-color="rgba(212,168,67,0)"/><stop offset="50%" stop-color="rgba(212,168,67,.14)"/><stop offset="100%" stop-color="rgba(212,168,67,0)"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<rect width="294" height="500" fill="url(#shine)"/>
+<circle cx="147" cy="210" r="118" fill="none" stroke="rgba(184,138,45,.09)" stroke-width="1"/>
+<circle cx="147" cy="210" r="88" fill="none" stroke="rgba(184,138,45,.1)" stroke-width="1"/>
+<circle cx="147" cy="210" r="58" fill="none" stroke="rgba(184,138,45,.14)" stroke-width="1"/>
+<circle cx="147" cy="200" r="54" fill="rgba(184,138,45,.1)" stroke="rgba(184,138,45,.28)" stroke-width="2"/>
+<circle cx="147" cy="200" r="41" fill="rgba(184,138,45,.08)" stroke="rgba(184,138,45,.22)" stroke-width="1"/>
+<path d="M118 244L108 290 147 268 186 290 176 244Z" fill="rgba(184,138,45,.18)"/>
+<polygon points="147,168 154,188 175,188 159,200 165,220 147,208 129,220 135,200 119,188 140,188" fill="rgba(212,168,67,.38)"/>
+<polygon points="48,78 52,90 64,90 55,97 58,109 48,102 38,109 41,97 32,90 44,90" fill="rgba(212,168,67,.22)"/>
+<polygon points="246,118 250,130 262,130 253,137 256,149 246,142 236,149 239,137 230,130 242,130" fill="rgba(212,168,67,.22)"/>
+<circle cx="30" cy="30" r="3" fill="rgba(184,138,45,.32)"/><circle cx="264" cy="30" r="3" fill="rgba(184,138,45,.32)"/>
+<circle cx="30" cy="470" r="3" fill="rgba(184,138,45,.32)"/><circle cx="264" cy="470" r="3" fill="rgba(184,138,45,.32)"/>
+</svg>`,
+
+anniversary_wedding:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#880e4f"/><stop offset="55%" stop-color="#c2185b"/><stop offset="100%" stop-color="#f48fb1"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="122" cy="205" r="44" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2.5"/>
+<circle cx="172" cy="205" r="44" fill="none" stroke="rgba(255,235,59,.35)" stroke-width="2.5"/>
+<path d="M147,238C147,238 118,220 118,205C118,194 129,186 140,193 143,195 147,200 147,200 151,195 154,193 163,186 174,186 176,194 176,205 176,220 147,238 147,238Z" fill="rgba(255,255,255,.18)"/>
+<path d="M58,136C58,136 43,126 43,115 43,107 50,100 57,105 60,107 64,111 64,111 68,107 71,105 78,100 85,107 87,115 87,126 87,136 64,136 64,136Z" fill="rgba(255,255,255,.13)"/>
+<path d="M242,338C242,338 227,328 227,317 227,309 234,302 241,307 244,309 248,313 248,313 252,309 255,307 262,302 269,309 271,317 271,328 271,338 248,338 248,338Z" fill="rgba(255,255,255,.13)"/>
+<path d="M112,78C112,78 100,71 100,63 100,57 106,52 112,56 114,57 117,60 117,60 120,57 123,56 129,52 135,57 137,63 137,71 137,78 117,78 117,78Z" fill="rgba(255,255,255,.15)"/>
+<circle cx="48" cy="400" r="4" fill="rgba(255,255,255,.14)"/>
+<circle cx="248" cy="80" r="3" fill="rgba(255,255,255,.14)"/>
+<path d="M0 444Q147 408 294 444L294 500 0 500Z" fill="rgba(0,0,0,.1)"/>
+</svg>`,
+
+wedding:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#fce4ec"/><stop offset="40%" stop-color="#f48fb1"/><stop offset="100%" stop-color="#e91e63"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<ellipse cx="80" cy="78" rx="22" ry="33" fill="rgba(255,255,255,.2)" transform="rotate(-30 80 78)"/>
+<ellipse cx="214" cy="78" rx="22" ry="33" fill="rgba(255,255,255,.2)" transform="rotate(30 214 78)"/>
+<ellipse cx="38" cy="158" rx="16" ry="27" fill="rgba(255,255,255,.14)" transform="rotate(-50 38 158)"/>
+<ellipse cx="256" cy="158" rx="16" ry="27" fill="rgba(255,255,255,.14)" transform="rotate(50 256 158)"/>
+<path d="M122 230L102 198 122 167 172 167 192 198 172 230Z" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.22)" stroke-width="1"/>
+<line x1="147" y1="172" x2="147" y2="152" stroke="rgba(255,255,255,.5)" stroke-width="1.2"/>
+<line x1="136" y1="177" x2="118" y2="165" stroke="rgba(255,255,255,.5)" stroke-width="1.2"/>
+<line x1="158" y1="177" x2="176" y2="165" stroke="rgba(255,255,255,.5)" stroke-width="1.2"/>
+<ellipse cx="40" cy="400" rx="40" ry="18" fill="rgba(255,255,255,.07)"/>
+<ellipse cx="250" cy="420" rx="36" ry="16" fill="rgba(255,255,255,.07)"/>
+<path d="M0 444Q147 410 294 444L294 500 0 500Z" fill="rgba(0,0,0,.08)"/>
+</svg>`,
+
+baby:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#e3f2fd"/><stop offset="50%" stop-color="#90caf9"/><stop offset="100%" stop-color="#1976d2"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="200" cy="98" r="50" fill="rgba(255,255,255,.18)"/>
+<circle cx="220" cy="83" r="40" fill="rgba(144,202,249,.6)"/>
+<circle cx="50" cy="78" r="4" fill="rgba(255,255,255,.6)"/>
+<circle cx="80" cy="48" r="3" fill="rgba(255,255,255,.5)"/>
+<circle cx="120" cy="28" r="4" fill="rgba(255,255,255,.6)"/>
+<circle cx="28" cy="128" r="2.5" fill="rgba(255,255,255,.5)"/>
+<circle cx="258" cy="178" r="3" fill="rgba(255,255,255,.4)"/>
+<circle cx="238" cy="218" r="2" fill="rgba(255,255,255,.4)"/>
+<circle cx="147" cy="258" r="64" fill="rgba(255,255,255,.1)"/>
+<circle cx="147" cy="258" r="48" fill="rgba(255,255,255,.09)"/>
+<circle cx="132" cy="253" r="5" fill="rgba(255,255,255,.28)"/>
+<circle cx="162" cy="253" r="5" fill="rgba(255,255,255,.28)"/>
+<path d="M132 270Q147 281 162 270" stroke="rgba(255,255,255,.28)" stroke-width="2" fill="none"/>
+<ellipse cx="58" cy="428" rx="46" ry="24" fill="rgba(255,255,255,.09)"/>
+<ellipse cx="228" cy="448" rx="50" ry="22" fill="rgba(255,255,255,.09)"/>
+<path d="M0 462Q147 434 294 462L294 500 0 500Z" fill="rgba(255,255,255,.07)"/>
+</svg>`,
+
+awards:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2=".6" y2="1">
+<stop offset="0%" stop-color="#0d1b5a"/><stop offset="100%" stop-color="#283593"/>
+</linearGradient>
+<radialGradient id="glow" cx="50%" cy="42%" r="35%">
+<stop offset="0%" stop-color="rgba(255,215,0,.2)"/><stop offset="100%" stop-color="rgba(255,215,0,0)"/>
+</radialGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<rect width="294" height="500" fill="url(#glow)"/>
+<path d="M118,180C118,180 78,165 78,133 78,112 94,107 110,118 120,126 127,138 127,138L167,138C167,138 174,126 184,118 200,107 216,112 216,133 216,165 176,180 176,180Z" fill="rgba(212,168,67,.18)" stroke="rgba(212,168,67,.32)" stroke-width="1.5"/>
+<path d="M127,278L120,243 127,218 167,218 174,243 167,278" fill="rgba(212,168,67,.13)" stroke="rgba(212,168,67,.28)" stroke-width="1.5"/>
+<rect x="127" y="278" width="40" height="48" rx="3" fill="rgba(212,168,67,.2)" stroke="rgba(212,168,67,.35)" stroke-width="1.5"/>
+<rect x="107" y="323" width="80" height="9" rx="2" fill="rgba(212,168,67,.28)" stroke="rgba(212,168,67,.38)" stroke-width="1"/>
+<polygon points="147,153 153,168 168,168 156,177 160,192 147,183 134,192 138,177 126,168 141,168" fill="rgba(212,168,67,.42)"/>
+<polygon points="48,78 52,90 64,90 55,97 58,109 48,102 38,109 41,97 32,90 44,90" fill="rgba(212,168,67,.24)"/>
+<polygon points="246,118 250,130 262,130 253,137 256,149 246,142 236,149 239,137 230,130 242,130" fill="rgba(212,168,67,.24)"/>
+<line x1="147" y1="58" x2="147" y2="28" stroke="rgba(212,168,67,.18)" stroke-width="2"/>
+<line x1="212" y1="78" x2="238" y2="57" stroke="rgba(212,168,67,.18)" stroke-width="2"/>
+<line x1="82" y1="78" x2="56" y2="57" stroke="rgba(212,168,67,.18)" stroke-width="2"/>
+</svg>`,
+
+welcome:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#004d40"/><stop offset="55%" stop-color="#00695c"/><stop offset="100%" stop-color="#26a69a"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<line x1="147" y1="200" x2="147" y2="40" stroke="rgba(255,255,255,.08)" stroke-width="2"/>
+<line x1="147" y1="200" x2="294" y2="108" stroke="rgba(255,255,255,.08)" stroke-width="2"/>
+<line x1="147" y1="200" x2="294" y2="295" stroke="rgba(255,255,255,.08)" stroke-width="2"/>
+<line x1="147" y1="200" x2="0" y2="108" stroke="rgba(255,255,255,.08)" stroke-width="2"/>
+<line x1="147" y1="200" x2="0" y2="295" stroke="rgba(255,255,255,.08)" stroke-width="2"/>
+<line x1="147" y1="200" x2="60" y2="40" stroke="rgba(255,255,255,.06)" stroke-width="2"/>
+<line x1="147" y1="200" x2="234" y2="40" stroke="rgba(255,255,255,.06)" stroke-width="2"/>
+<line x1="147" y1="200" x2="14" y2="185" stroke="rgba(255,255,255,.06)" stroke-width="2"/>
+<line x1="147" y1="200" x2="280" y2="185" stroke="rgba(255,255,255,.06)" stroke-width="2"/>
+<rect x="107" y="138" width="80" height="122" rx="40 40 4 4" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+<circle cx="178" cy="198" r="5" fill="rgba(255,255,255,.28)"/>
+<circle cx="147" cy="198" r="88" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1.5"/>
+<circle cx="147" cy="198" r="114" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+<circle cx="38" cy="58" r="4" fill="rgba(255,255,255,.3)"/>
+<circle cx="258" cy="78" r="3" fill="rgba(255,255,255,.25)"/>
+<circle cx="28" cy="348" r="3" fill="rgba(255,255,255,.18)"/>
+<circle cx="268" cy="378" r="4" fill="rgba(255,255,255,.18)"/>
+<path d="M0 434Q147 405 294 434L294 500 0 500Z" fill="rgba(0,0,0,.1)"/>
+</svg>`,
+
+farewell:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".4" y2="1">
+<stop offset="0%" stop-color="#e65100"/><stop offset="55%" stop-color="#ef6c00"/><stop offset="100%" stop-color="#ff8f00"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="147" cy="320" r="62" fill="rgba(255,255,255,.15)"/>
+<circle cx="147" cy="320" r="47" fill="rgba(255,255,255,.2)"/>
+<circle cx="147" cy="320" r="32" fill="rgba(255,255,255,.25)"/>
+<line x1="0" y1="320" x2="294" y2="320" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+<path d="M56 320Q147 342 238 320" stroke="rgba(255,255,255,.28)" stroke-width="1.5" fill="none"/>
+<line x1="147" y1="258" x2="147" y2="218" stroke="rgba(255,255,255,.15)" stroke-width="2"/>
+<line x1="178" y1="268" x2="205" y2="240" stroke="rgba(255,255,255,.15)" stroke-width="2"/>
+<line x1="116" y1="268" x2="89" y2="240" stroke="rgba(255,255,255,.15)" stroke-width="2"/>
+<line x1="192" y1="296" x2="232" y2="286" stroke="rgba(255,255,255,.15)" stroke-width="2"/>
+<line x1="102" y1="296" x2="62" y2="286" stroke="rgba(255,255,255,.15)" stroke-width="2"/>
+<path d="M0 320L294 320 294 500 0 500Z" fill="rgba(0,0,0,.13)"/>
+<path d="M88 500L130 320 164 320 206 500Z" fill="rgba(255,255,255,.04)"/>
+<ellipse cx="58" cy="118" rx="42" ry="17" fill="rgba(255,255,255,.09)"/>
+<ellipse cx="228" cy="148" rx="37" ry="15" fill="rgba(255,255,255,.09)"/>
+<circle cx="48" cy="58" r="2.5" fill="rgba(255,255,255,.4)"/>
+<circle cx="200" cy="38" r="2" fill="rgba(255,255,255,.3)"/>
+<circle cx="248" cy="88" r="2.5" fill="rgba(255,255,255,.3)"/>
+</svg>`,
+
+retirement:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#6a1b9a"/><stop offset="40%" stop-color="#e91e63"/><stop offset="70%" stop-color="#ff8f00"/><stop offset="100%" stop-color="#ffa000"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="147" cy="348" r="98" fill="rgba(255,255,255,.06)"/>
+<circle cx="147" cy="348" r="68" fill="rgba(255,255,255,.08)"/>
+<circle cx="147" cy="348" r="44" fill="rgba(255,255,255,.1)"/>
+<path d="M0 308L294 308 294 500 0 500Z" fill="rgba(0,0,0,.08)"/>
+<ellipse cx="68" cy="258" rx="56" ry="20" fill="rgba(255,255,255,.06)"/>
+<ellipse cx="228" cy="278" rx="50" ry="18" fill="rgba(255,255,255,.06)"/>
+<circle cx="48" cy="58" r="2.5" fill="rgba(255,255,255,.42)"/>
+<circle cx="100" cy="38" r="2" fill="rgba(255,255,255,.32)"/>
+<circle cx="178" cy="48" r="2.5" fill="rgba(255,255,255,.42)"/>
+<circle cx="238" cy="68" r="2" fill="rgba(255,255,255,.32)"/>
+<circle cx="28" cy="98" r="2" fill="rgba(255,255,255,.28)"/>
+<circle cx="258" cy="118" r="2.5" fill="rgba(255,255,255,.3)"/>
+<path d="M0 378Q73 355 147 368Q221 381 294 378L294 500 0 500Z" fill="rgba(0,0,0,.1)"/>
+</svg>`,
+
+diwali:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".4" y2="1">
+<stop offset="0%" stop-color="#bf360c"/><stop offset="45%" stop-color="#e64a19"/><stop offset="75%" stop-color="#ff6d00"/><stop offset="100%" stop-color="#ffc107"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<ellipse cx="65" cy="318" rx="27" ry="10" fill="rgba(255,200,50,.3)" stroke="rgba(255,200,50,.4)" stroke-width="1"/>
+<path d="M38 318Q65 338 92 318" stroke="rgba(255,200,50,.4)" stroke-width="1" fill="rgba(255,200,50,.13)"/>
+<path d="M65,308C60,293 54,277 65,266 76,277 70,293 65,308Z" fill="rgba(255,255,150,.5)"/>
+<path d="M65,306C62,296 58,286 65,277 72,286 68,296 65,306Z" fill="rgba(255,200,50,.65)"/>
+<ellipse cx="147" cy="298" rx="32" ry="11" fill="rgba(255,200,50,.35)" stroke="rgba(255,200,50,.5)" stroke-width="1.5"/>
+<path d="M115 298Q147 320 179 298" stroke="rgba(255,200,50,.5)" stroke-width="1.5" fill="rgba(255,200,50,.18)"/>
+<path d="M147,286C140,268 132,250 147,234 162,250 154,268 147,286Z" fill="rgba(255,255,150,.55)"/>
+<path d="M147,284C142,270 136,256 147,242 158,256 152,270 147,284Z" fill="rgba(255,200,50,.72)"/>
+<ellipse cx="229" cy="318" rx="27" ry="10" fill="rgba(255,200,50,.3)" stroke="rgba(255,200,50,.4)" stroke-width="1"/>
+<path d="M202 318Q229 338 256 318" stroke="rgba(255,200,50,.4)" stroke-width="1" fill="rgba(255,200,50,.13)"/>
+<path d="M229,308C224,293 218,277 229,266 240,277 234,293 229,308Z" fill="rgba(255,255,150,.5)"/>
+<path d="M229,306C226,296 222,286 229,277 236,286 232,296 229,306Z" fill="rgba(255,200,50,.65)"/>
+<circle cx="100" cy="198" r="3" fill="rgba(255,255,200,.5)"/>
+<circle cx="194" cy="178" r="2.5" fill="rgba(255,255,200,.42)"/>
+<circle cx="38" cy="148" r="2" fill="rgba(255,255,200,.42)"/>
+<circle cx="258" cy="158" r="3" fill="rgba(255,255,200,.42)"/>
+<circle cx="147" cy="100" r="5" fill="rgba(255,255,150,.5)"/>
+<line x1="147" y1="108" x2="147" y2="126" stroke="rgba(255,255,150,.4)" stroke-width="1.5"/>
+<line x1="155" y1="105" x2="166" y2="120" stroke="rgba(255,255,150,.4)" stroke-width="1.5"/>
+<line x1="139" y1="105" x2="128" y2="120" stroke="rgba(255,255,150,.4)" stroke-width="1.5"/>
+<line x1="161" y1="100" x2="178" y2="100" stroke="rgba(255,255,150,.4)" stroke-width="1.5"/>
+<line x1="133" y1="100" x2="116" y2="100" stroke="rgba(255,255,150,.4)" stroke-width="1.5"/>
+<path d="M0 368L294 368 294 500 0 500Z" fill="rgba(0,0,0,.12)"/>
+</svg>`,
+
+holi:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".7" y2="1">
+<stop offset="0%" stop-color="#1565c0"/><stop offset="55%" stop-color="#7b1fa2"/><stop offset="100%" stop-color="#c62828"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<ellipse cx="58" cy="98" rx="56" ry="40" fill="rgba(255,235,59,.35)" transform="rotate(-20 58 98)"/>
+<ellipse cx="222" cy="78" rx="50" ry="36" fill="rgba(76,175,80,.35)" transform="rotate(15 222 78)"/>
+<ellipse cx="38" cy="248" rx="46" ry="36" fill="rgba(244,67,54,.3)" transform="rotate(10 38 248)"/>
+<ellipse cx="262" cy="198" rx="40" ry="30" fill="rgba(255,152,0,.35)" transform="rotate(-15 262 198)"/>
+<ellipse cx="147" cy="178" rx="62" ry="46" fill="rgba(233,30,99,.24)" transform="rotate(5 147 178)"/>
+<ellipse cx="98" cy="358" rx="52" ry="36" fill="rgba(63,81,181,.3)" transform="rotate(-10 98 358)"/>
+<ellipse cx="232" cy="348" rx="46" ry="32" fill="rgba(0,188,212,.3)" transform="rotate(20 232 348)"/>
+<circle cx="147" cy="228" r="50" fill="rgba(255,255,255,.09)"/>
+<circle cx="147" cy="228" r="30" fill="rgba(255,255,255,.07)"/>
+<circle cx="68" cy="48" r="5" fill="rgba(255,235,59,.42)"/>
+<circle cx="202" cy="38" r="4" fill="rgba(244,67,54,.42)"/>
+<circle cx="272" cy="298" r="5" fill="rgba(76,175,80,.42)"/>
+<circle cx="18" cy="398" r="4" fill="rgba(255,152,0,.42)"/>
+</svg>`,
+
+newyear:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".4" y2="1">
+<stop offset="0%" stop-color="#0d0d2e"/><stop offset="100%" stop-color="#283593"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="22" cy="48" r="2" fill="rgba(255,255,255,.5)"/>
+<circle cx="72" cy="22" r="1.5" fill="rgba(255,255,255,.4)"/>
+<circle cx="148" cy="38" r="2.5" fill="rgba(255,255,255,.5)"/>
+<circle cx="218" cy="18" r="2" fill="rgba(255,255,255,.42)"/>
+<circle cx="268" cy="52" r="1.5" fill="rgba(255,255,255,.38)"/>
+<circle cx="42" cy="88" r="1.5" fill="rgba(255,255,255,.35)"/>
+<circle cx="178" cy="68" r="2" fill="rgba(255,255,255,.4)"/>
+<circle cx="248" cy="98" r="2.5" fill="rgba(255,255,255,.38)"/>
+<circle cx="108" cy="58" r="1.5" fill="rgba(255,255,255,.32)"/>
+<circle cx="8" cy="148" r="1.5" fill="rgba(255,255,255,.3)"/>
+<circle cx="288" cy="138" r="2" fill="rgba(255,255,255,.3)"/>
+<line x1="75" y1="152" x2="75" y2="102" stroke="rgba(255,215,0,.38)" stroke-width="1.5"/>
+<line x1="75" y1="152" x2="125" y2="127" stroke="rgba(255,215,0,.38)" stroke-width="1.5"/>
+<line x1="75" y1="152" x2="125" y2="177" stroke="rgba(255,215,0,.38)" stroke-width="1.5"/>
+<line x1="75" y1="152" x2="75" y2="202" stroke="rgba(255,215,0,.38)" stroke-width="1.5"/>
+<line x1="75" y1="152" x2="25" y2="177" stroke="rgba(255,215,0,.38)" stroke-width="1.5"/>
+<line x1="75" y1="152" x2="25" y2="127" stroke="rgba(255,215,0,.38)" stroke-width="1.5"/>
+<circle cx="75" cy="152" r="6" fill="rgba(255,215,0,.52)"/>
+<line x1="147" y1="108" x2="147" y2="38" stroke="rgba(255,100,100,.43)" stroke-width="1.5"/>
+<line x1="147" y1="108" x2="212" y2="68" stroke="rgba(255,100,100,.43)" stroke-width="1.5"/>
+<line x1="147" y1="108" x2="212" y2="148" stroke="rgba(255,100,100,.43)" stroke-width="1.5"/>
+<line x1="147" y1="108" x2="147" y2="178" stroke="rgba(255,100,100,.43)" stroke-width="1.5"/>
+<line x1="147" y1="108" x2="82" y2="148" stroke="rgba(255,100,100,.43)" stroke-width="1.5"/>
+<line x1="147" y1="108" x2="82" y2="68" stroke="rgba(255,100,100,.43)" stroke-width="1.5"/>
+<line x1="147" y1="108" x2="192" y2="48" stroke="rgba(255,100,100,.3)" stroke-width="1.5"/>
+<line x1="147" y1="108" x2="102" y2="48" stroke="rgba(255,100,100,.3)" stroke-width="1.5"/>
+<circle cx="147" cy="108" r="8" fill="rgba(255,100,100,.55)"/>
+<line x1="225" y1="178" x2="225" y2="133" stroke="rgba(100,200,255,.38)" stroke-width="1.5"/>
+<line x1="225" y1="178" x2="265" y2="153" stroke="rgba(100,200,255,.38)" stroke-width="1.5"/>
+<line x1="225" y1="178" x2="265" y2="203" stroke="rgba(100,200,255,.38)" stroke-width="1.5"/>
+<line x1="225" y1="178" x2="225" y2="223" stroke="rgba(100,200,255,.38)" stroke-width="1.5"/>
+<line x1="225" y1="178" x2="185" y2="203" stroke="rgba(100,200,255,.38)" stroke-width="1.5"/>
+<line x1="225" y1="178" x2="185" y2="153" stroke="rgba(100,200,255,.38)" stroke-width="1.5"/>
+<circle cx="225" cy="178" r="6" fill="rgba(100,200,255,.52)"/>
+<path d="M0 380L18 380 18 358 34 358 34 347 50 347 50 363 66 363 66 342 76 342 76 328 86 328 86 360 110 360 110 370 130 370 130 354 146 354 146 344 156 344 156 354 172 354 172 370 186 370 186 354 202 354 202 338 212 338 212 354 228 354 228 364 244 364 244 354 258 354 258 370 272 370 272 360 286 360 286 380 294 380 294 500 0 500Z" fill="rgba(0,0,0,.3)"/>
+</svg>`,
+
+christmas:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".4" y2="1">
+<stop offset="0%" stop-color="#1b5e20"/><stop offset="55%" stop-color="#2e7d32"/><stop offset="100%" stop-color="#43a047"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<polygon points="147,60 58,278 236,278" fill="rgba(0,100,0,.28)" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+<polygon points="147,100 78,268 216,268" fill="rgba(76,175,80,.22)"/>
+<rect x="132" y="278" width="30" height="40" rx="3" fill="rgba(101,67,33,.4)"/>
+<circle cx="98" cy="218" r="8" fill="rgba(244,67,54,.4)" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+<circle cx="172" cy="198" r="7" fill="rgba(255,235,59,.42)" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+<circle cx="118" cy="243" r="6" fill="rgba(33,150,243,.4)" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+<circle cx="185" cy="243" r="7" fill="rgba(255,152,0,.42)" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+<circle cx="147" cy="228" r="5" fill="rgba(233,30,99,.42)"/>
+<circle cx="155" cy="175" r="5" fill="rgba(255,235,59,.35)"/>
+<polygon points="147,48 152,63 167,63 155,71 160,86 147,78 134,86 139,71 127,63 142,63" fill="rgba(255,235,59,.52)"/>
+<circle cx="28" cy="58" r="2.5" fill="rgba(255,255,255,.5)"/>
+<circle cx="258" cy="78" r="2" fill="rgba(255,255,255,.42)"/>
+<circle cx="48" cy="148" r="2.5" fill="rgba(255,255,255,.4)"/>
+<circle cx="253" cy="158" r="2" fill="rgba(255,255,255,.4)"/>
+<circle cx="18" cy="218" r="2" fill="rgba(255,255,255,.32)"/>
+<circle cx="275" cy="238" r="2.5" fill="rgba(255,255,255,.32)"/>
+<path d="M0 358Q73 338 147 353Q221 368 294 358L294 500 0 500Z" fill="rgba(255,255,255,.11)"/>
+</svg>`,
+
+eid:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#004d40"/><stop offset="55%" stop-color="#00695c"/><stop offset="100%" stop-color="#009688"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<path d="M106,248Q106,188 147,188Q188,188 188,248Z" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+<path d="M69,258Q69,232 90,232Q111,232 111,258Z" fill="rgba(255,255,255,.09)"/>
+<path d="M183,258Q183,232 204,232Q225,232 225,258Z" fill="rgba(255,255,255,.09)"/>
+<rect x="54" y="188" width="12" height="70" rx="2" fill="rgba(255,255,255,.14)"/>
+<path d="M54 188Q60 174 66 188Z" fill="rgba(255,255,255,.2)"/>
+<rect x="228" y="188" width="12" height="70" rx="2" fill="rgba(255,255,255,.14)"/>
+<path d="M228 188Q234 174 240 188Z" fill="rgba(255,255,255,.2)"/>
+<rect x="38" y="256" width="218" height="12" rx="2" fill="rgba(255,255,255,.09)"/>
+<circle cx="192" cy="78" r="38" fill="rgba(255,255,255,.14)"/>
+<circle cx="207" cy="66" r="32" fill="rgba(0,121,107,.88)"/>
+<polygon points="222,73 225,83 235,83 227,89 230,99 222,93 214,99 217,89 209,83 219,83" fill="rgba(255,255,255,.42)"/>
+<circle cx="38" cy="48" r="2" fill="rgba(255,255,255,.42)"/>
+<circle cx="98" cy="28" r="2.5" fill="rgba(255,255,255,.42)"/>
+<circle cx="68" cy="118" r="1.5" fill="rgba(255,255,255,.32)"/>
+<circle cx="23" cy="158" r="2" fill="rgba(255,255,255,.3)"/>
+<path d="M0 354Q147 338 294 354L294 500 0 500Z" fill="rgba(0,0,0,.1)"/>
+</svg>`,
+
+spiritual:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#e65100"/><stop offset="45%" stop-color="#ef6c00"/><stop offset="75%" stop-color="#f57c00"/><stop offset="100%" stop-color="#ffd740"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="147" cy="228" r="128" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+<circle cx="147" cy="228" r="103" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="1"/>
+<circle cx="147" cy="228" r="78" fill="none" stroke="rgba(255,255,255,.11)" stroke-width="1"/>
+<circle cx="147" cy="228" r="53" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<circle cx="147" cy="228" r="28" fill="rgba(255,255,255,.08)"/>
+<circle cx="147" cy="125" r="8" fill="rgba(255,255,255,.12)"/>
+<circle cx="147" cy="331" r="8" fill="rgba(255,255,255,.12)"/>
+<circle cx="44" cy="228" r="8" fill="rgba(255,255,255,.12)"/>
+<circle cx="250" cy="228" r="8" fill="rgba(255,255,255,.12)"/>
+<circle cx="76" cy="157" r="6" fill="rgba(255,255,255,.1)"/>
+<circle cx="218" cy="157" r="6" fill="rgba(255,255,255,.1)"/>
+<circle cx="76" cy="299" r="6" fill="rgba(255,255,255,.1)"/>
+<circle cx="218" cy="299" r="6" fill="rgba(255,255,255,.1)"/>
+<circle cx="93" cy="151" r="5" fill="rgba(255,255,255,.08)"/>
+<circle cx="201" cy="151" r="5" fill="rgba(255,255,255,.08)"/>
+<circle cx="93" cy="305" r="5" fill="rgba(255,255,255,.08)"/>
+<circle cx="201" cy="305" r="5" fill="rgba(255,255,255,.08)"/>
+<circle cx="147" cy="228" r="18" fill="rgba(255,255,255,.14)"/>
+<path d="M0 0L294 0 294 38Q147 78 0 38Z" fill="rgba(255,255,255,.04)"/>
+</svg>`,
+
+national:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#FF9933"/>
+<stop offset="33.3%" stop-color="#FF9933"/>
+<stop offset="33.3%" stop-color="#FFFFFF"/>
+<stop offset="66.6%" stop-color="#FFFFFF"/>
+<stop offset="66.6%" stop-color="#138808"/>
+<stop offset="100%" stop-color="#138808"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)" opacity=".62"/>
+<rect width="294" height="500" fill="rgba(0,0,128,.12)"/>
+<circle cx="147" cy="228" r="62" fill="none" stroke="rgba(0,0,160,.38)" stroke-width="2.5"/>
+<circle cx="147" cy="228" r="8" fill="rgba(0,0,160,.3)"/>
+<line x1="147" y1="170" x2="147" y2="228" stroke="rgba(0,0,160,.28)" stroke-width="1"/>
+<line x1="172" y1="176" x2="147" y2="228" stroke="rgba(0,0,160,.28)" stroke-width="1"/>
+<line x1="191" y1="193" x2="147" y2="228" stroke="rgba(0,0,160,.28)" stroke-width="1"/>
+<line x1="199" y1="218" x2="147" y2="228" stroke="rgba(0,0,160,.28)" stroke-width="1"/>
+<line x1="191" y1="243" x2="147" y2="228" stroke="rgba(0,0,160,.28)" stroke-width="1"/>
+<line x1="172" y1="260" x2="147" y2="228" stroke="rgba(0,0,160,.28)" stroke-width="1"/>
+<line x1="147" y1="286" x2="147" y2="228" stroke="rgba(0,0,160,.28)" stroke-width="1"/>
+<line x1="122" y1="260" x2="147" y2="228" stroke="rgba(0,0,160,.28)" stroke-width="1"/>
+<line x1="103" y1="243" x2="147" y2="228" stroke="rgba(0,0,160,.28)" stroke-width="1"/>
+<line x1="95" y1="218" x2="147" y2="228" stroke="rgba(0,0,160,.28)" stroke-width="1"/>
+<line x1="103" y1="193" x2="147" y2="228" stroke="rgba(0,0,160,.28)" stroke-width="1"/>
+<line x1="122" y1="176" x2="147" y2="228" stroke="rgba(0,0,160,.28)" stroke-width="1"/>
+<line x1="160" y1="172" x2="147" y2="228" stroke="rgba(0,0,160,.18)" stroke-width="1"/>
+<line x1="183" y1="184" x2="147" y2="228" stroke="rgba(0,0,160,.18)" stroke-width="1"/>
+<line x1="197" y1="205" x2="147" y2="228" stroke="rgba(0,0,160,.18)" stroke-width="1"/>
+<line x1="197" y1="231" x2="147" y2="228" stroke="rgba(0,0,160,.18)" stroke-width="1"/>
+<line x1="183" y1="252" x2="147" y2="228" stroke="rgba(0,0,160,.18)" stroke-width="1"/>
+<line x1="160" y1="266" x2="147" y2="228" stroke="rgba(0,0,160,.18)" stroke-width="1"/>
+<line x1="134" y1="266" x2="147" y2="228" stroke="rgba(0,0,160,.18)" stroke-width="1"/>
+<line x1="111" y1="252" x2="147" y2="228" stroke="rgba(0,0,160,.18)" stroke-width="1"/>
+<line x1="97" y1="231" x2="147" y2="228" stroke="rgba(0,0,160,.18)" stroke-width="1"/>
+<line x1="97" y1="205" x2="147" y2="228" stroke="rgba(0,0,160,.18)" stroke-width="1"/>
+<line x1="111" y1="184" x2="147" y2="228" stroke="rgba(0,0,160,.18)" stroke-width="1"/>
+<line x1="134" y1="172" x2="147" y2="228" stroke="rgba(0,0,160,.18)" stroke-width="1"/>
+</svg>`,
+
+harvest:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".4" y2="1">
+<stop offset="0%" stop-color="#1b5e20"/><stop offset="45%" stop-color="#f57f17"/><stop offset="100%" stop-color="#f9a825"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="147" cy="118" r="50" fill="rgba(255,215,0,.14)"/>
+<circle cx="147" cy="118" r="35" fill="rgba(255,215,0,.18)"/>
+<line x1="147" y1="83" x2="147" y2="62" stroke="rgba(255,215,0,.2)" stroke-width="2"/>
+<line x1="172" y1="91" x2="186" y2="74" stroke="rgba(255,215,0,.2)" stroke-width="2"/>
+<line x1="122" y1="91" x2="108" y2="74" stroke="rgba(255,215,0,.2)" stroke-width="2"/>
+<line x1="183" y1="116" x2="204" y2="112" stroke="rgba(255,215,0,.2)" stroke-width="2"/>
+<line x1="111" y1="116" x2="90" y2="112" stroke="rgba(255,215,0,.2)" stroke-width="2"/>
+<line x1="30" y1="500" x2="30" y2="320" stroke="rgba(212,168,67,.42)" stroke-width="2.5"/>
+<ellipse cx="30" cy="318" rx="6" ry="14" fill="rgba(212,168,67,.42)"/>
+<ellipse cx="24" cy="328" rx="5" ry="11" fill="rgba(212,168,67,.32)" transform="rotate(-20 24 328)"/>
+<ellipse cx="36" cy="328" rx="5" ry="11" fill="rgba(212,168,67,.32)" transform="rotate(20 36 328)"/>
+<line x1="66" y1="500" x2="66" y2="310" stroke="rgba(212,168,67,.4)" stroke-width="2.5"/>
+<ellipse cx="66" cy="308" rx="6" ry="14" fill="rgba(212,168,67,.4)"/>
+<ellipse cx="60" cy="318" rx="5" ry="11" fill="rgba(212,168,67,.3)" transform="rotate(-20 60 318)"/>
+<ellipse cx="72" cy="318" rx="5" ry="11" fill="rgba(212,168,67,.3)" transform="rotate(20 72 318)"/>
+<line x1="108" y1="500" x2="108" y2="322" stroke="rgba(212,168,67,.42)" stroke-width="2.5"/>
+<ellipse cx="108" cy="320" rx="6" ry="14" fill="rgba(212,168,67,.42)"/>
+<line x1="148" y1="500" x2="148" y2="312" stroke="rgba(212,168,67,.44)" stroke-width="2.5"/>
+<ellipse cx="148" cy="310" rx="6" ry="14" fill="rgba(212,168,67,.44)"/>
+<line x1="188" y1="500" x2="188" y2="322" stroke="rgba(212,168,67,.42)" stroke-width="2.5"/>
+<ellipse cx="188" cy="320" rx="6" ry="14" fill="rgba(212,168,67,.42)"/>
+<line x1="228" y1="500" x2="228" y2="310" stroke="rgba(212,168,67,.4)" stroke-width="2.5"/>
+<ellipse cx="228" cy="308" rx="6" ry="14" fill="rgba(212,168,67,.4)"/>
+<line x1="264" y1="500" x2="264" y2="320" stroke="rgba(212,168,67,.38)" stroke-width="2.5"/>
+<ellipse cx="264" cy="318" rx="6" ry="14" fill="rgba(212,168,67,.38)"/>
+<path d="M0 358L294 358 294 500 0 500Z" fill="rgba(101,67,33,.18)"/>
+</svg>`,
+
+wellness:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#1b5e20"/><stop offset="55%" stop-color="#2e7d32"/><stop offset="100%" stop-color="#00796b"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<ellipse cx="147" cy="218" rx="78" ry="52" fill="rgba(255,255,255,.07)" transform="rotate(-30 147 218)"/>
+<ellipse cx="147" cy="218" rx="78" ry="52" fill="rgba(255,255,255,.06)" transform="rotate(30 147 218)"/>
+<ellipse cx="147" cy="218" rx="78" ry="52" fill="rgba(255,255,255,.06)" transform="rotate(90 147 218)"/>
+<ellipse cx="147" cy="218" rx="78" ry="52" fill="rgba(255,255,255,.05)" transform="rotate(-60 147 218)"/>
+<ellipse cx="147" cy="218" rx="78" ry="52" fill="rgba(255,255,255,.05)" transform="rotate(60 147 218)"/>
+<ellipse cx="147" cy="218" rx="78" ry="52" fill="rgba(255,255,255,.05)" transform="rotate(0 147 218)"/>
+<circle cx="147" cy="218" r="20" fill="rgba(255,255,255,.12)"/>
+<ellipse cx="58" cy="118" rx="32" ry="15" fill="rgba(255,255,255,.09)" transform="rotate(-30 58 118)"/>
+<ellipse cx="240" cy="138" rx="30" ry="13" fill="rgba(255,255,255,.09)" transform="rotate(30 240 138)"/>
+<ellipse cx="147" cy="398" rx="82" ry="20" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1.5"/>
+<ellipse cx="147" cy="418" rx="104" ry="25" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+<ellipse cx="147" cy="438" rx="126" ry="30" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+</svg>`,
+
+motivation:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".4" y2="1">
+<stop offset="0%" stop-color="#bf360c"/><stop offset="30%" stop-color="#e64a19"/><stop offset="55%" stop-color="#ff6d00"/><stop offset="75%" stop-color="#ffa000"/><stop offset="100%" stop-color="#ffd740"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="147" cy="378" r="158" fill="rgba(255,255,255,.07)"/>
+<circle cx="147" cy="378" r="118" fill="rgba(255,255,255,.09)"/>
+<circle cx="147" cy="378" r="78" fill="rgba(255,255,255,.11)"/>
+<circle cx="147" cy="378" r="44" fill="rgba(255,255,255,.14)"/>
+<rect x="0" y="378" width="294" height="2" fill="rgba(255,255,255,.2)"/>
+<line x1="147" y1="328" x2="147" y2="204" stroke="rgba(255,255,255,.11)" stroke-width="2.5"/>
+<line x1="188" y1="338" x2="247" y2="232" stroke="rgba(255,255,255,.09)" stroke-width="2.5"/>
+<line x1="218" y1="358" x2="294" y2="288" stroke="rgba(255,255,255,.07)" stroke-width="2.5"/>
+<line x1="106" y1="338" x2="47" y2="232" stroke="rgba(255,255,255,.09)" stroke-width="2.5"/>
+<line x1="76" y1="358" x2="0" y2="288" stroke="rgba(255,255,255,.07)" stroke-width="2.5"/>
+<line x1="228" y1="328" x2="287" y2="252" stroke="rgba(255,255,255,.06)" stroke-width="2.5"/>
+<line x1="66" y1="328" x2="7" y2="252" stroke="rgba(255,255,255,.06)" stroke-width="2.5"/>
+<rect x="0" y="378" width="294" height="122" fill="rgba(0,0,0,.14)"/>
+<circle cx="48" cy="48" r="2" fill="rgba(255,255,255,.2)"/>
+<circle cx="202" cy="38" r="2.5" fill="rgba(255,255,255,.2)"/>
+<circle cx="98" cy="18" r="1.5" fill="rgba(255,255,255,.16)"/>
+</svg>`,
+
+corporate:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#0d2137"/><stop offset="55%" stop-color="#0a3d62"/><stop offset="100%" stop-color="#1565c0"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<polygon points="0,0 32,0 16,28" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="32,0 64,0 48,28" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="64,0 96,0 80,28" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="96,0 128,0 112,28" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="128,0 160,0 144,28" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="160,0 192,0 176,28" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="192,0 224,0 208,28" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="224,0 256,0 240,28" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="16,28 48,28 32,56" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="48,28 80,28 64,56" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="80,28 112,28 96,56" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="112,28 144,28 128,56" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="144,28 176,28 160,56" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="176,28 208,28 192,56" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<polygon points="208,28 240,28 224,56" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<line x1="0" y1="318" x2="294" y2="318" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+<line x1="0" y1="336" x2="294" y2="336" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<rect x="38" y="378" width="30" height="80" rx="2" fill="rgba(255,255,255,.07)"/>
+<rect x="88" y="356" width="30" height="102" rx="2" fill="rgba(255,255,255,.07)"/>
+<rect x="138" y="338" width="30" height="120" rx="2" fill="rgba(255,255,255,.09)"/>
+<rect x="188" y="352" width="30" height="106" rx="2" fill="rgba(255,255,255,.07)"/>
+<rect x="238" y="342" width="30" height="116" rx="2" fill="rgba(255,255,255,.07)"/>
+<circle cx="147" cy="178" r="30" fill="rgba(255,255,255,.04)"/>
+<circle cx="147" cy="178" r="18" fill="rgba(255,255,255,.05)"/>
+<circle cx="147" cy="178" r="8" fill="rgba(255,255,255,.07)"/>
+</svg>`,
+
+gratitude:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".6" y2="1">
+<stop offset="0%" stop-color="#7b1fa2"/><stop offset="55%" stop-color="#9c27b0"/><stop offset="100%" stop-color="#fbc02d"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<path d="M147,278C147,278 72,233 72,188 72,160 93,143 116,153 128,158 147,173 147,173 147,173 166,158 178,153 201,143 222,160 222,188 222,233 147,278 147,278Z" fill="rgba(255,255,255,.14)"/>
+<path d="M58,138C58,138 36,123 36,108 36,97 44,90 54,95 57,97 64,101 64,101 68,97 71,95 81,90 88,97 92,108 92,123 92,138 64,138 64,138Z" fill="rgba(255,255,255,.11)"/>
+<path d="M246,178C246,178 224,163 224,148 224,137 232,130 242,135 245,137 252,141 252,141 256,137 259,135 269,130 276,137 280,148 280,163 280,178 252,178 252,178Z" fill="rgba(255,255,255,.11)"/>
+<path d="M112,76C112,76 98,68 98,59 98,52 103,48 110,51 112,52 116,55 116,55 119,52 122,51 129,48 136,52 139,59 139,68 139,76 116,76 116,76Z" fill="rgba(255,255,255,.14)"/>
+<circle cx="48" cy="48" r="3" fill="rgba(255,235,59,.52)"/>
+<circle cx="228" cy="58" r="3.5" fill="rgba(255,235,59,.42)"/>
+<circle cx="38" cy="378" r="3" fill="rgba(255,255,255,.28)"/>
+<circle cx="258" cy="358" r="3.5" fill="rgba(255,255,255,.28)"/>
+<rect x="18" y="18" width="52" height="52" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1" rx="4"/>
+<rect x="224" y="18" width="52" height="52" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1" rx="4"/>
+</svg>`,
+
+condolence:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".4" y2="1">
+<stop offset="0%" stop-color="#37474f"/><stop offset="55%" stop-color="#455a64"/><stop offset="100%" stop-color="#78909c"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="147" cy="218" r="128" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1.5"/>
+<circle cx="147" cy="218" r="98" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+<circle cx="147" cy="218" r="68" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+<circle cx="147" cy="218" r="38" fill="rgba(255,255,255,.04)"/>
+<path d="M113,198Q98,183 108,173Q124,166 140,177Q147,171 156,169Q176,163 181,178Q186,193 171,198Q166,213 147,213Q129,213 113,198Z" fill="rgba(255,255,255,.13)"/>
+<path d="M145,197Q129,188 118,194Q113,204 124,210Z" fill="rgba(255,255,255,.1)"/>
+<circle cx="38" cy="58" r="2.5" fill="rgba(255,255,255,.3)"/>
+<circle cx="218" cy="48" r="2" fill="rgba(255,255,255,.25)"/>
+<circle cx="98" cy="28" r="2" fill="rgba(255,255,255,.2)"/>
+<circle cx="258" cy="98" r="2.5" fill="rgba(255,255,255,.2)"/>
+<path d="M0 452Q147 432 294 452L294 500 0 500Z" fill="rgba(255,255,255,.04)"/>
+</svg>`,
+
+fun:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".7" y2="1">
+<stop offset="0%" stop-color="#1565c0"/><stop offset="50%" stop-color="#7b1fa2"/><stop offset="100%" stop-color="#e91e63"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="58" cy="98" r="46" fill="rgba(255,235,59,.23)"/>
+<circle cx="228" cy="148" r="40" fill="rgba(76,175,80,.23)"/>
+<circle cx="48" cy="298" r="52" fill="rgba(255,152,0,.19)"/>
+<circle cx="258" cy="348" r="46" fill="rgba(244,67,54,.19)"/>
+<circle cx="147" cy="218" r="72" fill="rgba(255,255,255,.07)"/>
+<polygon points="78,198 82,211 95,211 85,218 89,231 78,224 67,231 71,218 61,211 74,211" fill="rgba(255,235,59,.42)"/>
+<polygon points="222,98 226,111 239,111 229,118 233,131 222,124 211,131 215,118 205,111 218,111" fill="rgba(255,255,255,.32)"/>
+<rect x="148" y="48" width="8" height="8" rx="1" fill="rgba(255,235,59,.42)" transform="rotate(30 152 52)"/>
+<rect x="198" y="248" width="7" height="7" rx="1" fill="rgba(255,255,255,.32)" transform="rotate(-20 201 251)"/>
+<rect x="38" y="398" width="8" height="8" rx="1" fill="rgba(76,175,80,.42)" transform="rotate(15 42 402)"/>
+<circle cx="242" cy="278" r="5" fill="rgba(255,152,0,.42)"/>
+<circle cx="58" cy="428" r="6" fill="rgba(244,67,54,.3)"/>
+<circle cx="178" cy="378" r="5" fill="rgba(255,255,255,.24)"/>
+</svg>`,
+
+diversity:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#4a148c"/><stop offset="55%" stop-color="#880e4f"/><stop offset="100%" stop-color="#c62828"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="147" cy="438" r="218" fill="none" stroke="rgba(244,67,54,.28)" stroke-width="18"/>
+<circle cx="147" cy="438" r="192" fill="none" stroke="rgba(255,152,0,.28)" stroke-width="18"/>
+<circle cx="147" cy="438" r="166" fill="none" stroke="rgba(255,235,59,.28)" stroke-width="18"/>
+<circle cx="147" cy="438" r="140" fill="none" stroke="rgba(76,175,80,.28)" stroke-width="18"/>
+<circle cx="147" cy="438" r="114" fill="none" stroke="rgba(33,150,243,.28)" stroke-width="18"/>
+<circle cx="147" cy="438" r="88" fill="none" stroke="rgba(156,39,176,.28)" stroke-width="18"/>
+<rect x="0" y="0" width="294" height="220" fill="rgba(74,20,140,.65)"/>
+<path d="M147,148C147,148 108,126 108,100 108,80 120,72 133,78 136,80 147,86 147,86 147,86 158,80 161,78 174,72 186,80 186,100 186,126 147,148 147,148Z" fill="rgba(255,255,255,.18)"/>
+<circle cx="38" cy="48" r="3" fill="rgba(255,255,255,.32)"/>
+<circle cx="238" cy="58" r="2.5" fill="rgba(255,255,255,.32)"/>
+<circle cx="138" cy="28" r="3" fill="rgba(255,255,255,.32)"/>
+<circle cx="198" cy="98" r="2" fill="rgba(255,255,255,.28)"/>
+<circle cx="78" cy="88" r="2.5" fill="rgba(255,255,255,.28)"/>
+</svg>`,
+
+family:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#bf360c"/><stop offset="55%" stop-color="#e64a19"/><stop offset="100%" stop-color="#f57c00"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="108" cy="218" r="22" fill="rgba(255,255,255,.14)"/>
+<path d="M73 318Q73 268 108 268Q143 268 143 318Z" fill="rgba(255,255,255,.11)"/>
+<circle cx="186" cy="218" r="22" fill="rgba(255,255,255,.14)"/>
+<path d="M151 318Q151 268 186 268Q221 268 221 318Z" fill="rgba(255,255,255,.11)"/>
+<circle cx="147" cy="273" r="14" fill="rgba(255,255,255,.18)"/>
+<path d="M124 323Q124 293 147 293Q170 293 170 323Z" fill="rgba(255,255,255,.14)"/>
+<circle cx="147" cy="98" r="44" fill="rgba(255,255,255,.09)"/>
+<circle cx="147" cy="98" r="28" fill="rgba(255,255,255,.1)"/>
+<path d="M147,152C147,152 132,142 132,133 132,126 138,122 144,125 145,126 147,128 147,128 147,128 149,126 150,125 156,122 162,126 162,133 162,142 147,152 147,152Z" fill="rgba(255,255,255,.28)"/>
+<path d="M0 378L294 378 294 500 0 500Z" fill="rgba(0,0,0,.11)"/>
+</svg>`,
+
+learning:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#1a237e"/><stop offset="55%" stop-color="#283593"/><stop offset="100%" stop-color="#3949ab"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<rect x="134" y="158" width="26" height="180" rx="3" fill="rgba(255,255,255,.18)"/>
+<path d="M134,163C98,163 57,173 42,198L42,333C57,308 98,298 134,298Z" fill="rgba(255,255,255,.11)" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<path d="M160,163C196,163 237,173 252,198L252,333C237,308 196,298 160,298Z" fill="rgba(255,255,255,.11)" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<line x1="62" y1="188" x2="128" y2="183" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<line x1="62" y1="208" x2="128" y2="203" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<line x1="62" y1="228" x2="128" y2="223" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<line x1="62" y1="248" x2="128" y2="243" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<line x1="62" y1="268" x2="128" y2="263" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<line x1="166" y1="183" x2="232" y2="188" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<line x1="166" y1="203" x2="232" y2="208" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<line x1="166" y1="223" x2="232" y2="228" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<line x1="166" y1="243" x2="232" y2="248" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<line x1="166" y1="263" x2="232" y2="268" stroke="rgba(255,255,255,.14)" stroke-width="1"/>
+<circle cx="147" cy="88" r="30" fill="rgba(255,235,59,.14)" stroke="rgba(255,235,59,.24)" stroke-width="1.5"/>
+<rect x="136" y="116" width="22" height="10" rx="3" fill="rgba(255,235,59,.18)"/>
+<line x1="147" y1="57" x2="147" y2="38" stroke="rgba(255,235,59,.2)" stroke-width="1.5"/>
+<line x1="168" y1="64" x2="182" y2="50" stroke="rgba(255,235,59,.2)" stroke-width="1.5"/>
+<line x1="126" y1="64" x2="112" y2="50" stroke="rgba(255,235,59,.2)" stroke-width="1.5"/>
+<line x1="178" y1="84" x2="198" y2="80" stroke="rgba(255,235,59,.2)" stroke-width="1.5"/>
+<line x1="116" y1="84" x2="96" y2="80" stroke="rgba(255,235,59,.2)" stroke-width="1.5"/>
+<circle cx="28" cy="48" r="2.5" fill="rgba(255,255,255,.3)"/>
+<circle cx="258" cy="58" r="2" fill="rgba(255,255,255,.25)"/>
+</svg>`,
+
+nature:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".4" y2="1">
+<stop offset="0%" stop-color="#1b5e20"/><stop offset="50%" stop-color="#2e7d32"/><stop offset="100%" stop-color="#558b2f"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<polygon points="147,118 48,208 58,208 58,318 236,318 236,208 246,208" fill="rgba(255,255,255,.09)" stroke="rgba(255,255,255,.18)" stroke-width="1.5"/>
+<rect x="127" y="268" width="40" height="50" rx="20 20 3 3" fill="rgba(255,255,255,.14)"/>
+<rect x="73" y="232" width="36" height="30" rx="3" fill="rgba(255,235,59,.18)" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+<rect x="185" y="232" width="36" height="30" rx="3" fill="rgba(255,235,59,.18)" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+<rect x="78" y="138" width="22" height="42" fill="rgba(255,255,255,.11)"/>
+<path d="M33 318Q33 278 55 278Q77 278 77 318Z" fill="rgba(255,255,255,.07)"/>
+<line x1="55" y1="318" x2="55" y2="348" stroke="rgba(255,255,255,.11)" stroke-width="3"/>
+<path d="M218 318Q218 278 240 278Q262 278 262 318Z" fill="rgba(255,255,255,.07)"/>
+<line x1="240" y1="318" x2="240" y2="348" stroke="rgba(255,255,255,.11)" stroke-width="3"/>
+<path d="M0 348L294 348 294 500 0 500Z" fill="rgba(0,0,0,.09)"/>
+<circle cx="228" cy="78" r="36" fill="rgba(255,235,59,.14)"/>
+<circle cx="228" cy="78" r="24" fill="rgba(255,235,59,.16)"/>
+</svg>`,
+
+pride:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#6a1b9a"/><stop offset="100%" stop-color="#f3e5f5"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<rect x="0" y="198" width="294" height="50" fill="rgba(244,67,54,.38)"/>
+<rect x="0" y="243" width="294" height="40" fill="rgba(255,152,0,.38)"/>
+<rect x="0" y="278" width="294" height="36" fill="rgba(255,235,59,.38)"/>
+<rect x="0" y="309" width="294" height="36" fill="rgba(76,175,80,.38)"/>
+<rect x="0" y="340" width="294" height="36" fill="rgba(33,150,243,.38)"/>
+<rect x="0" y="371" width="294" height="36" fill="rgba(156,39,176,.38)"/>
+<rect x="0" y="0" width="294" height="208" fill="rgba(106,27,154,.72)"/>
+<path d="M147,148C147,148 108,126 108,100 108,80 120,72 134,78 137,80 147,87 147,87 147,87 157,80 160,78 174,72 186,80 186,100 186,126 147,148 147,148Z" fill="rgba(255,255,255,.18)"/>
+<circle cx="38" cy="48" r="3" fill="rgba(255,255,255,.42)"/>
+<circle cx="238" cy="58" r="2.5" fill="rgba(255,255,255,.42)"/>
+<circle cx="138" cy="28" r="3" fill="rgba(255,255,255,.42)"/>
+<circle cx="198" cy="98" r="2" fill="rgba(255,255,255,.32)"/>
+<circle cx="78" cy="88" r="2.5" fill="rgba(255,255,255,.32)"/>
+</svg>`,
+
+onam:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#1b5e20"/><stop offset="55%" stop-color="#2e7d32"/><stop offset="100%" stop-color="#66bb6a"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="147" cy="248" r="16" fill="rgba(255,235,59,.52)"/>
+<circle cx="147" cy="193" r="12" fill="rgba(255,152,0,.42)"/>
+<circle cx="191" cy="220" r="12" fill="rgba(233,30,99,.38)"/>
+<circle cx="192" cy="276" r="12" fill="rgba(244,67,54,.38)"/>
+<circle cx="147" cy="303" r="12" fill="rgba(76,175,80,.38)"/>
+<circle cx="102" cy="276" r="12" fill="rgba(33,150,243,.38)"/>
+<circle cx="103" cy="220" r="12" fill="rgba(156,39,176,.38)"/>
+<circle cx="147" cy="152" r="8" fill="rgba(255,235,59,.38)"/>
+<circle cx="203" cy="172" r="8" fill="rgba(255,152,0,.32)"/>
+<circle cx="228" cy="230" r="8" fill="rgba(233,30,99,.32)"/>
+<circle cx="219" cy="294" r="8" fill="rgba(244,67,54,.32)"/>
+<circle cx="175" cy="337" r="8" fill="rgba(76,175,80,.32)"/>
+<circle cx="119" cy="337" r="8" fill="rgba(33,150,243,.32)"/>
+<circle cx="75" cy="294" r="8" fill="rgba(156,39,176,.32)"/>
+<circle cx="66" cy="230" r="8" fill="rgba(255,235,59,.32)"/>
+<circle cx="91" cy="172" r="8" fill="rgba(255,152,0,.28)"/>
+<path d="M38 418Q147 448 256 418Q202 458 147 463Q92 458 38 418Z" fill="rgba(139,69,19,.18)"/>
+</svg>`,
+
+spring:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#f8bbd0"/><stop offset="45%" stop-color="#f48fb1"/><stop offset="100%" stop-color="#e91e63"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<ellipse cx="48" cy="48" rx="12" ry="18" fill="rgba(255,255,255,.24)" transform="rotate(-30 48 48)"/>
+<ellipse cx="24" cy="74" rx="12" ry="18" fill="rgba(244,67,54,.3)" transform="rotate(30 24 74)"/>
+<ellipse cx="68" cy="74" rx="12" ry="18" fill="rgba(255,255,255,.24)" transform="rotate(-70 68 74)"/>
+<ellipse cx="24" cy="26" rx="12" ry="18" fill="rgba(255,255,255,.24)" transform="rotate(-130 24 26)"/>
+<ellipse cx="72" cy="26" rx="12" ry="18" fill="rgba(255,152,0,.28)" transform="rotate(60 72 26)"/>
+<circle cx="48" cy="52" r="7" fill="rgba(255,255,255,.42)"/>
+<ellipse cx="156" cy="68" rx="12" ry="18" fill="rgba(255,255,255,.22)" transform="rotate(-30 156 68)"/>
+<ellipse cx="132" cy="94" rx="12" ry="18" fill="rgba(244,67,54,.28)" transform="rotate(30 132 94)"/>
+<ellipse cx="176" cy="94" rx="12" ry="18" fill="rgba(255,255,255,.22)" transform="rotate(-70 176 94)"/>
+<ellipse cx="132" cy="46" rx="12" ry="18" fill="rgba(255,255,255,.22)" transform="rotate(-130 132 46)"/>
+<ellipse cx="180" cy="46" rx="12" ry="18" fill="rgba(255,152,0,.26)" transform="rotate(60 180 46)"/>
+<circle cx="156" cy="72" r="7" fill="rgba(255,255,255,.4)"/>
+<ellipse cx="258" cy="98" rx="11" ry="16" fill="rgba(255,255,255,.2)" transform="rotate(-30 258 98)"/>
+<ellipse cx="236" cy="120" rx="11" ry="16" fill="rgba(156,39,176,.26)" transform="rotate(30 236 120)"/>
+<ellipse cx="278" cy="120" rx="11" ry="16" fill="rgba(255,255,255,.2)" transform="rotate(-70 278 120)"/>
+<circle cx="258" cy="102" r="6" fill="rgba(255,255,255,.38)"/>
+<ellipse cx="88" cy="338" rx="10" ry="16" fill="rgba(255,255,255,.18)" transform="rotate(-30 88 338)"/>
+<ellipse cx="66" cy="360" rx="10" ry="16" fill="rgba(244,67,54,.26)" transform="rotate(30 66 360)"/>
+<ellipse cx="108" cy="360" rx="10" ry="16" fill="rgba(255,255,255,.18)" transform="rotate(-70 108 360)"/>
+<circle cx="88" cy="342" r="6" fill="rgba(255,255,255,.36)"/>
+<path d="M0 442Q147 422 294 442L294 500 0 500Z" fill="rgba(76,175,80,.18)"/>
+</svg>`,
+
+rakhi:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#880e4f"/><stop offset="50%" stop-color="#e91e63"/><stop offset="100%" stop-color="#ff80ab"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<circle cx="147" cy="198" r="80" fill="none" stroke="rgba(255,215,0,.28)" stroke-width="2" stroke-dasharray="8 4"/>
+<circle cx="147" cy="198" r="58" fill="none" stroke="rgba(255,215,0,.2)" stroke-width="1.5" stroke-dasharray="5 3"/>
+<circle cx="147" cy="198" r="38" fill="rgba(255,255,255,.09)" stroke="rgba(255,215,0,.28)" stroke-width="1.5"/>
+<ellipse cx="147" cy="176" rx="14" ry="9" fill="rgba(255,255,255,.14)" transform="rotate(0 147 176)"/>
+<ellipse cx="166" cy="185" rx="14" ry="9" fill="rgba(255,255,255,.12)" transform="rotate(60 166 185)"/>
+<ellipse cx="166" cy="211" rx="14" ry="9" fill="rgba(255,255,255,.12)" transform="rotate(120 166 211)"/>
+<ellipse cx="147" cy="220" rx="14" ry="9" fill="rgba(255,255,255,.14)" transform="rotate(180 147 220)"/>
+<ellipse cx="128" cy="211" rx="14" ry="9" fill="rgba(255,255,255,.12)" transform="rotate(240 128 211)"/>
+<ellipse cx="128" cy="185" rx="14" ry="9" fill="rgba(255,255,255,.12)" transform="rotate(300 128 185)"/>
+<circle cx="147" cy="198" r="10" fill="rgba(255,215,0,.3)"/>
+<path d="M65 198C38 198 18 218 8 248" stroke="rgba(255,215,0,.28)" stroke-width="2" fill="none"/>
+<path d="M229 198C256 198 276 218 286 248" stroke="rgba(255,215,0,.28)" stroke-width="2" fill="none"/>
+<circle cx="38" cy="78" r="4" fill="rgba(255,255,255,.2)"/>
+<circle cx="254" cy="78" r="4" fill="rgba(255,255,255,.2)"/>
+<circle cx="147" cy="378" r="5" fill="rgba(255,215,0,.2)"/>
+</svg>`,
+
+navratri:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#b71c1c"/><stop offset="55%" stop-color="#e53935"/><stop offset="100%" stop-color="#ef9a9a"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<path d="M37,90L57,138 37,138 57,90Z" fill="rgba(255,215,0,.14)" stroke="rgba(255,215,0,.28)" stroke-width="1"/>
+<circle cx="47" cy="114" r="6" fill="rgba(255,215,0,.2)"/>
+<path d="M111,60L131,108 111,108 131,60Z" fill="rgba(255,215,0,.14)" stroke="rgba(255,215,0,.28)" stroke-width="1"/>
+<circle cx="121" cy="84" r="6" fill="rgba(255,215,0,.2)"/>
+<path d="M185,70L205,118 185,118 205,70Z" fill="rgba(255,215,0,.14)" stroke="rgba(255,215,0,.28)" stroke-width="1"/>
+<circle cx="195" cy="94" r="6" fill="rgba(255,215,0,.2)"/>
+<path d="M37,210L57,258 37,258 57,210Z" fill="rgba(255,215,0,.12)" stroke="rgba(255,215,0,.24)" stroke-width="1"/>
+<circle cx="47" cy="234" r="6" fill="rgba(255,215,0,.18)"/>
+<path d="M111,180L131,228 111,228 131,180Z" fill="rgba(255,215,0,.14)" stroke="rgba(255,215,0,.28)" stroke-width="1"/>
+<circle cx="121" cy="204" r="6" fill="rgba(255,215,0,.2)"/>
+<path d="M185,190L205,238 185,238 205,190Z" fill="rgba(255,215,0,.12)" stroke="rgba(255,215,0,.24)" stroke-width="1"/>
+<circle cx="195" cy="214" r="6" fill="rgba(255,215,0,.18)"/>
+<path d="M258,100L278,148 258,148 278,100Z" fill="rgba(255,215,0,.12)" stroke="rgba(255,215,0,.22)" stroke-width="1"/>
+<circle cx="268" cy="124" r="6" fill="rgba(255,215,0,.18)"/>
+<path d="M258,220L278,268 258,268 278,220Z" fill="rgba(255,215,0,.12)" stroke="rgba(255,215,0,.22)" stroke-width="1"/>
+<circle cx="268" cy="244" r="6" fill="rgba(255,215,0,.18)"/>
+<line x1="0" y1="0" x2="294" y2="500" stroke="rgba(255,215,0,.04)" stroke-width="1"/>
+<line x1="294" y1="0" x2="0" y2="500" stroke="rgba(255,215,0,.04)" stroke-width="1"/>
+</svg>`,
+
+ganesh:()=>`<svg viewBox="0 0 294 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+<defs><linearGradient id="bg" x1="0" y1="0" x2=".5" y2="1">
+<stop offset="0%" stop-color="#ff6f00"/><stop offset="45%" stop-color="#ffa000"/><stop offset="100%" stop-color="#ffc107"/>
+</linearGradient></defs>
+<rect width="294" height="500" fill="url(#bg)"/>
+<ellipse cx="147" cy="218" rx="62" ry="42" fill="rgba(255,255,255,.09)" transform="rotate(0 147 218)"/>
+<ellipse cx="147" cy="218" rx="62" ry="42" fill="rgba(255,255,255,.08)" transform="rotate(45 147 218)"/>
+<ellipse cx="147" cy="218" rx="62" ry="42" fill="rgba(255,255,255,.08)" transform="rotate(90 147 218)"/>
+<ellipse cx="147" cy="218" rx="62" ry="42" fill="rgba(255,255,255,.07)" transform="rotate(135 147 218)"/>
+<circle cx="147" cy="218" r="22" fill="rgba(255,255,255,.1)"/>
+<path d="M18 78Q147 18 276 78" stroke="rgba(255,255,255,.18)" stroke-width="2" fill="none"/>
+<path d="M38 98Q147 43 256 98" stroke="rgba(255,255,255,.14)" stroke-width="1.5" fill="none"/>
+<path d="M108,148Q147,98 186,148Q170,163 147,158Q124,163 108,148Z" fill="rgba(255,255,255,.09)"/>
+<circle cx="48" cy="58" r="4" fill="rgba(255,255,255,.3)"/>
+<circle cx="246" cy="58" r="4" fill="rgba(255,255,255,.3)"/>
+<circle cx="147" cy="38" r="5" fill="rgba(255,255,255,.32)"/>
+</svg>`,
+
+};
+
+/* ── OCCASION → VISUAL KEY ── */
+const VM = {
+  birthday:'birthday', workAnniversary:'work_anniversary',
+  weddingAnniversary:'anniversary_wedding', marriage:'wedding',
+  newBaby:'baby', housewarming:'nature', promotion:'awards',
+  certification:'learning', retirement:'retirement', farewell:'farewell',
+  welcome:'welcome', diwali:'diwali', holi:'holi', newYear:'newyear',
+  christmas:'christmas', eid:'eid', gurpurab:'spiritual',
+  navratri:'navratri', ganeshChaturthi:'ganesh', rakshaBandhan:'rakhi',
+  independenceDay:'national', republicDay:'national',
+  harvestFestival:'harvest', onam:'onam', baisakhi:'harvest',
+  janmashtami:'spiritual', buddhaPurnima:'spiritual', easter:'spring',
+  yogaDay:'wellness', employeeMonth:'awards', starPerformer:'awards',
+  teamAchievement:'corporate', salesMilestone:'corporate',
+  targetAchieved:'corporate', leadership:'corporate', thankYou:'gratitude',
+  quarterlyAward:'awards', annualAward:'awards', getWell:'wellness',
+  mentalHealth:'wellness', worldHealth:'wellness',
+  fitnessChallenge:'wellness', bloodDonation:'wellness',
+  wellnessReminder:'wellness', mondayMotivation:'motivation',
+  fridaySignoff:'motivation', fyClosing:'corporate',
+  foundationDay:'corporate', townhall:'corporate', training:'learning',
+  policyUpdate:'corporate', safety:'corporate', teamOuting:'fun',
+  funFriday:'fun', contest:'fun', womensDay:'diversity',
+  mensDay:'diversity', pride:'pride', mothersDay:'family',
+  fathersDay:'family', condolence:'condolence',
+  bereavement:'condolence', crisis:'condolence',
+};
+
+function getVisual(occ) {
+  const key = VM[occ] || 'corporate';
+  return (V[key] || V.corporate)();
+}
+
+/* ========================================================
+   TEMPLATES — all 53 occasions fully filled
+   ======================================================== */
+const T = {
+  birthday:{tag:'Celebration',title:'A Toast to Your <span>Brilliant</span> Year',msgFormal:'Warmest wishes on your birthday. Your presence enriches our workplace, and we are delighted to celebrate the exceptional individual you are.',msgWarm:'Happy Birthday! We are so glad to have you with us — may your special day be filled with joy, laughter, and everything you love.',msgCelebratory:'It\'s time to celebrate! Wishing you an incredible birthday and a year ahead even more amazing than the last. Cheers to you!'},
+  workAnniversary:{tag:'Work Milestone',title:'Celebrating Years of Excellence',msgFormal:'Congratulations on this milestone. Your dedication, expertise and consistent contributions have been truly invaluable to the team.',msgWarm:'Happy Work Anniversary! We feel so lucky to have you — thank you for your hard work and for being such a wonderful colleague.',msgCelebratory:'Another year of greatness in the books! Your impact here is huge — today we celebrate you!'},
+  weddingAnniversary:{tag:'Everlasting Love',title:'A Journey of <span>Togetherness</span>',msgFormal:'Wishing you both continued happiness and partnership. May your bond grow ever stronger with each passing year.',msgWarm:'Happy Anniversary! Your love story is truly inspiring. Wishing you many more years of joy and companionship.',msgCelebratory:'Cheers to love! Happy Anniversary — keep shining together for years to come!'},
+  marriage:{tag:'New Chapter',title:'The Beauty of <span>Union</span>',msgFormal:'Congratulations on your marriage. May this new journey be filled with love, laughter and a lifetime of shared dreams.',msgWarm:'So happy for you both! Wishing you a lifetime of love, warmth and happiness together.',msgCelebratory:'Cheers to the newlyweds! Wishing you a lifetime of love, laughter and incredible adventures!'},
+  newBaby:{tag:'New Life',title:'Welcome, <span>Little One</span>',msgFormal:'Congratulations on the newest addition to your family. Wishing you immense joy and good health.',msgWarm:'What a blessing! Welcome to the world, little one. So happy for you and your entire family.',msgCelebratory:'A new adventure begins! Huge congratulations on your bundle of joy!'},
+  housewarming:{tag:'New Home',title:'Home Sweet <span>Home</span>',msgFormal:'Congratulations on your new home. May it be filled with love, laughter and cherished memories for years to come.',msgWarm:'So excited for you and your new home! Wishing you warmth and happiness in every corner.',msgCelebratory:'Keys in hand, heart full of joy! Congratulations on your beautiful new home!'},
+  promotion:{tag:'Excellence',title:'Elevating to <span>New Heights</span>',msgFormal:'Your hard work, dedication and vision have led to this well-deserved advancement. Congratulations.',msgWarm:'Huge congratulations on your promotion! You deserve every bit of this success.',msgCelebratory:'Level Up! You absolutely crushed it — congratulations on your amazing new role!'},
+  certification:{tag:'Achievement',title:'Mastery <span>Unlocked</span>',msgFormal:'Congratulations on your certification. This achievement reflects your commitment to professional excellence.',msgWarm:'So proud of you! Your dedication to learning and growth is truly inspiring.',msgCelebratory:'Certified and amazing! You put in the work and it shows — congratulations!'},
+  retirement:{tag:'Legacy',title:'A Remarkable <span>Career</span>',msgFormal:'Thank you for your years of remarkable dedication and service. Wishing you a fulfilling and joyful retirement.',msgWarm:'Happy Retirement! Enjoy every well-deserved minute of your next beautiful adventure.',msgCelebratory:'The legend has retired! Here\'s to the next exciting chapter of your incredible life!'},
+  farewell:{tag:'Until We Meet Again',title:'A New <span>Horizon</span> Awaits',msgFormal:'Wishing you immense success in your next endeavor. Your contributions have been invaluable and will be long remembered.',msgWarm:'We\'re going to miss you so much! Best of luck in your exciting new adventure ahead.',msgCelebratory:'Go get \'em! The world better be ready — wishing you massive success ahead!'},
+  welcome:{tag:'New Beginning',title:'Welcome to the <span>Team</span>',msgFormal:'We are delighted to have you join us. We look forward to achieving great things together.',msgWarm:'A big, warm welcome to the family! We are so happy you\'re here.',msgCelebratory:'The team just got even better! Welcome aboard — let\'s make great things happen!'},
+  diwali:{tag:'Festival of Lights',title:'Luminous <span>Prosperity</span>',msgFormal:'Wishing you and your family a Diwali filled with the radiant glow of happiness and prosperity.',msgWarm:'Happy Diwali! May your home and heart be lit with joy, love and laughter.',msgCelebratory:'Sparkle and Shine! Wishing you a brilliant Diwali filled with love and light!'},
+  holi:{tag:'Festival of Colors',title:'Vibrant <span>Spirit</span>',msgFormal:'May the colors of Holi paint your life with joy, togetherness and lasting happiness.',msgWarm:'Happy Holi! Wishing you a festival as vibrant and colorful as you are.',msgCelebratory:'Happy Holi! Let\'s splash the world with color and fill the day with pure joy!'},
+  newYear:{tag:'New Horizons',title:'A Vision for the <span>New Year</span>',msgFormal:'May the new year bring fresh opportunities, greater achievements and renewed purpose.',msgWarm:'Happy New Year! Wishing you a peaceful, joyful and prosperous year ahead.',msgCelebratory:'New Year, New Goals! Let\'s make this the best year yet — together!'},
+  christmas:{tag:'Yuletide Joy',title:'Season of <span>Magic</span>',msgFormal:'Wishing you a Christmas filled with warmth, wonder and cherished moments with loved ones.',msgWarm:'Merry Christmas! Wishing you a cozy, peaceful and joyful holiday season.',msgCelebratory:'Merry Christmas! The most wonderful time of the year is here — let\'s celebrate!'},
+  eid:{tag:'Eid Mubarak',title:'Grace and <span>Blessings</span>',msgFormal:'May this Eid bring peace, prosperity and happiness to you and your entire family.',msgWarm:'Eid Mubarak! Wishing you and your loved ones a blessed and joyful celebration.',msgCelebratory:'Eid Mubarak! May your day be filled with joy, love and delicious feasts!'},
+  gurpurab:{tag:'Gurpurab',title:'Blessed <span>Light</span>',msgFormal:'May the teachings of Guru Nanak Dev Ji illuminate your path with wisdom and grace.',msgWarm:'Gurpurab Mubarak! Wishing you and your family peace, joy and blessings.',msgCelebratory:'Waheguru Ji Ka Khalsa, Waheguru Ji Ki Fateh! Gurpurab Mubarak!'},
+  navratri:{tag:'Navratri / Dussehra',title:'Triumph of <span>Light</span>',msgFormal:'May the divine energy of Navratri fill your life with strength, victory and prosperity.',msgWarm:'Happy Navratri! May Goddess Durga bless you with courage, joy and abundance.',msgCelebratory:'Let\'s celebrate the victory of good! Happy Navratri and Dussehra!'},
+  ganeshChaturthi:{tag:'Ganesh Chaturthi',title:'Blessings of <span>Ganesha</span>',msgFormal:'May Lord Ganesha remove all obstacles from your path and bless you with wisdom and success.',msgWarm:'Ganpati Bappa Morya! Wishing you and your family joy, prosperity and blessings.',msgCelebratory:'Ganpati Bappa Morya! May Bappa grant all your wishes this auspicious season!'},
+  rakshaBandhan:{tag:'Raksha Bandhan',title:'Sacred <span>Bonds</span>',msgFormal:'May the bond of Raksha Bandhan strengthen the ties of love, care and protection forever.',msgWarm:'Happy Raksha Bandhan! Celebrating the beautiful bond of siblings and the love that binds.',msgCelebratory:'To love, laughter and unbreakable bonds! Happy Raksha Bandhan!'},
+  independenceDay:{tag:'Independence Day',title:'Pride of a <span>Nation</span>',msgFormal:'On this momentous day, let us honor the sacrifices that gave us freedom and renew our commitment to a better India.',msgWarm:'Happy Independence Day! Let\'s celebrate the spirit, pride and diversity of our great nation.',msgCelebratory:'Jai Hind! Happy Independence Day — let the tricolor fly high with pride!'},
+  republicDay:{tag:'Republic Day',title:'Saluting the <span>Republic</span>',msgFormal:'On Republic Day, we honor the Constitution and the democratic values that guide our great nation.',msgWarm:'Happy Republic Day! Let\'s take pride in our democracy and the vibrant diversity of India.',msgCelebratory:'Jai Hind! Happy Republic Day — proud to be Indian!'},
+  harvestFestival:{tag:'Harvest Festival',title:'Season of <span>Abundance</span>',msgFormal:'Wishing you the joy and warmth of the harvest season. May prosperity and good fortune fill your days.',msgWarm:'Happy Lohri / Pongal! May this season bring warmth, good health and sweet moments.',msgCelebratory:'The harvest is here! Happy Lohri / Pongal — let the bonfires and celebrations begin!'},
+  onam:{tag:'Onam',title:'Abundance and <span>Joy</span>',msgFormal:'May King Mahabali\'s blessing bring prosperity, happiness and harmony to your home.',msgWarm:'Happy Onam! May the spirit of the festival fill your heart with joy and love.',msgCelebratory:'Onam Ashamsakal! Let the vallamkali, pookalam and sadya festivities begin!'},
+  baisakhi:{tag:'Baisakhi',title:'New Season, <span>New Beginnings</span>',msgFormal:'May Baisakhi bring prosperity, good health and abundant blessings to you and your family.',msgWarm:'Happy Baisakhi! Wishing you a season filled with joy, harvest and togetherness.',msgCelebratory:'Bhangra time! Happy Baisakhi — let the celebrations of the new harvest begin!'},
+  janmashtami:{tag:'Janmashtami',title:'Divine <span>Blessings</span>',msgFormal:'May the blessings of Lord Krishna fill your life with wisdom, devotion and eternal joy.',msgWarm:'Happy Janmashtami! May Lord Krishna\'s blessings bring peace and happiness to you always.',msgCelebratory:'Nand Gher Anand Bhayo, Jai Kanha Lal Ki! Happy Janmashtami!'},
+  buddhaPurnima:{tag:'Buddha Purnima',title:'Path to <span>Enlightenment</span>',msgFormal:'May the teachings of Lord Buddha illuminate your path with wisdom, compassion and peace.',msgWarm:'Happy Buddha Purnima! May peace and mindfulness guide your journey through life.',msgCelebratory:'Happy Buddha Purnima! May you be filled with light, love and boundless inner peace!'},
+  easter:{tag:'Good Friday / Easter',title:'Hope and <span>Renewal</span>',msgFormal:'Wishing you a blessed Easter filled with hope, peace and the joy of new beginnings.',msgWarm:'Happy Easter! May this season of renewal bring warmth and joy to you and your loved ones.',msgCelebratory:'Happy Easter! A season of hope, love and beautiful new beginnings!'},
+  yogaDay:{tag:'Yoga Day',title:'Balance, Breathe, <span>Flourish</span>',msgFormal:'On International Yoga Day, let us embrace the ancient wisdom that unites mind, body and soul.',msgWarm:'Happy Yoga Day! Take a moment today to breathe deeply and reconnect with your inner self.',msgCelebratory:'Roll out your mat! Happy International Yoga Day — let\'s find our balance together!'},
+  employeeMonth:{tag:'Employee of the Month',title:'Star of the <span>Month</span>',msgFormal:'Your outstanding performance and commitment have been recognized by the entire organization. Congratulations.',msgWarm:'Absolutely well deserved! Your hard work, positivity and dedication shine every single day.',msgCelebratory:'You\'re our Star! Employee of the Month is YOURS — congratulations on this amazing recognition!'},
+  starPerformer:{tag:'Star Performer',title:'Excellence <span>Recognized</span>',msgFormal:'Your exceptional performance and contributions set the benchmark for excellence. Well done.',msgWarm:'You\'ve been shining so bright! Your results speak for themselves. Incredibly proud of you.',msgCelebratory:'STAR PERFORMER ALERT! You absolutely nailed it. The team sees you and celebrates you!'},
+  teamAchievement:{tag:'Team Achievement',title:'Together We <span>Excel</span>',msgFormal:'This achievement is a testament to the collective dedication and synergy of our remarkable team.',msgWarm:'What a team effort! Every one of you brought your best and the results show. So proud.',msgCelebratory:'TEAM WIN! You all smashed it together — that\'s the power of a great team!'},
+  salesMilestone:{tag:'Sales Milestone',title:'Crushing <span>Targets</span>',msgFormal:'Congratulations on reaching this significant sales milestone. Your performance is commendable.',msgWarm:'What a fantastic achievement! Your drive and dedication have produced incredible results.',msgCelebratory:'MILESTONE HIT! You crushed those numbers — the sales floor just got legendary!'},
+  targetAchieved:{tag:'Target Achieved',title:'Bulls-Eye <span>Performance</span>',msgFormal:'You have successfully achieved your target. This reflects your discipline and hard work.',msgWarm:'Target achieved and then some! We knew you had it in you — incredibly well done.',msgCelebratory:'TARGET: NAILED IT! You set the bar and then cleared it. Absolutely brilliant!'},
+  leadership:{tag:'Leadership',title:'Vision in <span>Action</span>',msgFormal:'Your leadership continues to inspire the team and drive meaningful results. Thank you.',msgWarm:'The way you lead — with empathy, clarity and purpose — makes such a difference every day.',msgCelebratory:'To our incredible leader — you make the whole team better. Thank you for being awesome!'},
+  thankYou:{tag:'Gratitude',title:'A Sincere <span>Thank You</span>',msgFormal:'Your contributions and efforts have not gone unnoticed. We are truly grateful for all you do.',msgWarm:'Just wanted to say a huge heartfelt THANK YOU! You make such a difference to all of us.',msgCelebratory:'YOU\'RE THE BEST! Thank you for going above and beyond — we appreciate you so much!'},
+  quarterlyAward:{tag:'Quarterly Award',title:'Quarterly <span>Excellence</span>',msgFormal:'Your consistently strong performance this quarter has earned well-deserved recognition.',msgWarm:'Quarter after quarter, you show up and deliver. This recognition is so well deserved!',msgCelebratory:'QUARTERLY CHAMP! You dominated this quarter — here\'s to the next one being even better!'},
+  annualAward:{tag:'Annual Award',title:'A Year of <span>Excellence</span>',msgFormal:'Your contributions across the year have been exceptional. Congratulations on this annual recognition.',msgWarm:'A whole year of incredible work — all recognized today. You truly deserve this award.',msgCelebratory:'ANNUAL AWARD WINNER! Outstanding all year long — the whole company sees you!'},
+  getWell:{tag:'Get Well Soon',title:'Wishing You <span>Swift Recovery</span>',msgFormal:'We wish you a swift and complete recovery. Your health and wellbeing are our top priority.',msgWarm:'Get well soon! We miss you and are sending you all our warmth and positive energy.',msgCelebratory:'Rest up, recharge and come back stronger! We\'re all rooting for your speedy recovery!'},
+  mentalHealth:{tag:'Mental Health',title:'It\'s OK to <span>Pause</span>',msgFormal:'Mental health matters. We encourage everyone to prioritize wellbeing and seek support when needed.',msgWarm:'You\'re not alone. We care deeply about your mental health and are here for you always.',msgCelebratory:'Mind over everything! Take a breath, embrace the moment — you are never alone here.'},
+  worldHealth:{tag:'World Health Day',title:'Your Health is <span>Wealth</span>',msgFormal:'On World Health Day, we reaffirm our commitment to employee wellbeing and healthy workplaces.',msgWarm:'Happy World Health Day! Take care of yourself — your health truly is your greatest asset.',msgCelebratory:'To better health for all! Happy World Health Day — let\'s make wellness a priority!'},
+  fitnessChallenge:{tag:'Fitness Challenge',title:'Stronger <span>Together</span>',msgFormal:'We are pleased to launch our workplace fitness challenge. Let us commit to healthier habits together.',msgWarm:'It\'s time to get moving! Join us in this exciting fitness challenge — your body will thank you.',msgCelebratory:'GAME ON! The Fitness Challenge starts NOW. Let\'s crush those health goals together!'},
+  bloodDonation:{tag:'Blood Donation',title:'Gift of <span>Life</span>',msgFormal:'We are proud to host our Blood Donation Camp. Your contribution can save precious lives.',msgWarm:'A little of you can save a life. Join our blood donation camp and make a real difference.',msgCelebratory:'Be a hero! Donate blood, save lives. Join us at the camp — every drop counts!'},
+  wellnessReminder:{tag:'Wellness',title:'Take a <span>Moment</span>',msgFormal:'A gentle reminder to prioritize your wellbeing. Small habits lead to lasting health.',msgWarm:'Remember to breathe, stretch and hydrate today. Your wellness matters to all of us.',msgCelebratory:'Wellness check! Drink water, take breaks, move your body — you\'ve got this!'},
+  mondayMotivation:{tag:'Monday Motivation',title:'Rise and <span>Shine</span>',msgFormal:'As we begin the new week, let us channel our focus and bring our best to every challenge.',msgWarm:'Happy Monday! Start the week with positivity and purpose — great things are ahead.',msgCelebratory:'MONDAY MODE: ON! Let\'s smash this week and make it count. You\'ve got this team!'},
+  fridaySignoff:{tag:'Friday Sign-off',title:'Well Done <span>This Week</span>',msgFormal:'Congratulations on a productive week. We hope you enjoy a refreshing and restful weekend.',msgWarm:'TGIF! You worked hard this week — now go and enjoy a wonderful weekend, you\'ve earned it!',msgCelebratory:'IT\'S FRIDAY! Pack up, log off, and go celebrate a fantastic week. You all rocked it!'},
+  fyClosing:{tag:'FY Closing',title:'A Year Well <span>Achieved</span>',msgFormal:'As the financial year draws to a close, we recognize and appreciate everyone\'s contributions.',msgWarm:'What an incredible year! Thank you for giving your all and making it count. Proud of this team.',msgCelebratory:'FY CLOSED! We crushed it — massive thanks to everyone for an outstanding year!'},
+  foundationDay:{tag:'Foundation Day',title:'Our <span>Legacy</span> Continues',msgFormal:'Today we celebrate the founding of our organization and the incredible journey since then.',msgWarm:'Happy Foundation Day! We\'ve come so far and it\'s because of each and every one of you.',msgCelebratory:'Happy Birthday to the company! Stronger and bolder every year — let\'s build even more!'},
+  townhall:{tag:'Townhall',title:'Come, Connect, <span>Collaborate</span>',msgFormal:'You are cordially invited to the upcoming Townhall. Your presence and participation are valued.',msgWarm:'Townhall time! Come with your questions and ideas. We\'d love to see you there.',msgCelebratory:'Townhall is HERE! Come meet, discuss and shape what\'s next. Let\'s do this together!'},
+  training:{tag:'Training',title:'Invest in <span>Growth</span>',msgFormal:'We are pleased to announce an upcoming training program. We encourage active participation.',msgWarm:'Learning time! This training is a great opportunity to grow your skills. Hope to see you there!',msgCelebratory:'SKILL UP TIME! A new training is coming — ready to level up your game?'},
+  policyUpdate:{tag:'Policy Update',title:'Important <span>Communication</span>',msgFormal:'Please take note of the important policy update. Your awareness and compliance are appreciated.',msgWarm:'Quick heads-up on a policy update — please take a moment to review the changes.',msgCelebratory:'Policy Update: New and Improved! Please take a moment to stay informed. Thank you!'},
+  safety:{tag:'Safety First',title:'Safety <span>Always</span>',msgFormal:'Your safety is our highest priority. Please adhere to all safety protocols at all times.',msgWarm:'Safety reminder! Take care of yourself and those around you — we go home safe, every day.',msgCelebratory:'Safety First, Always! Together we keep each other safe — thank you for making it a priority!'},
+  teamOuting:{tag:'Team Outing',title:'Time to <span>Celebrate</span>',msgFormal:'We are pleased to announce an upcoming team outing. We look forward to connecting beyond the workplace.',msgWarm:'Team outing time! Get ready for fun, bonding and some well-deserved celebration together.',msgCelebratory:'TEAM OUTING ALERT! Put on your best shoes — it\'s time to celebrate and have a blast!'},
+  funFriday:{tag:'Fun Friday',title:'Friday <span>Vibes</span>',msgFormal:'Fun Friday is here. We encourage everyone to participate and enjoy a moment of well-earned fun.',msgWarm:'Happy Fun Friday! Time to put the work aside and enjoy some laughter and good vibes.',msgCelebratory:'FUN FRIDAY IS HERE! Drop everything, the fun starts NOW — let\'s go!'},
+  contest:{tag:'Contest',title:'Show Your <span>Skills</span>',msgFormal:'We invite you to participate in the upcoming contest. We look forward to your enthusiastic participation.',msgWarm:'Contest time! Put on your thinking cap and show what you\'re made of. Can\'t wait to see you compete!',msgCelebratory:'GAME ON! The contest is LIVE — who\'s taking home the glory? May the best team win!'},
+  womensDay:{tag:"Women's Day",title:'Strength, Grace and <span>Power</span>',msgFormal:"On International Women's Day, we celebrate and honor the contributions of every woman in our workplace.",msgWarm:"Happy Women's Day! To every woman in our team — you inspire, lead and make us better every day.",msgCelebratory:"To the incredible women who move this world — HAPPY WOMEN'S DAY! You are phenomenal!"},
+  mensDay:{tag:"Men's Day",title:'Strong, Kind and <span>Present</span>',msgFormal:"On International Men's Day, we recognize the positive contributions of every man in our team.",msgWarm:"Happy Men's Day! To the men who lead with kindness and strength — you make a real difference.",msgCelebratory:"Happy Men's Day! To the incredible men on our team — today we celebrate you!"},
+  pride:{tag:'Pride Month',title:'Love, Inclusion and <span>Pride</span>',msgFormal:'As we celebrate Pride Month, we reaffirm our commitment to diversity, equity and inclusion for all.',msgWarm:'Happy Pride Month! Be yourself, love yourself — you are valued, celebrated and loved here.',msgCelebratory:'PRIDE MONTH! Love is love, and every color of this rainbow is celebrated here. Be you, always!'},
+  mothersDay:{tag:"Mother's Day",title:'Love <span>Personified</span>',msgFormal:"On Mother's Day, we honor and celebrate all the mothers who inspire us with their strength and love.",msgWarm:"Happy Mother's Day! To all the incredible mothers — thank you for everything you do.",msgCelebratory:"To the superhero mamas in our team — HAPPY MOTHER'S DAY! You are extraordinary!"},
+  fathersDay:{tag:"Father's Day",title:'The Pillar of <span>Strength</span>',msgFormal:"On Father's Day, we celebrate all the fathers who bring strength, guidance and love to their families.",msgWarm:"Happy Father's Day! To all the great dads — your presence, love and wisdom mean the world.",msgCelebratory:"Happy Father's Day to all the dads on our team! You are truly our everyday heroes."},
+  condolence:{tag:'In Sympathy',title:'With Deepest <span>Condolences</span>',msgFormal:'We extend our heartfelt condolences during this difficult time. Our thoughts are with you and your family.',msgWarm:'We are so deeply sorry for your loss. Please know that we are here for you in every way.',msgCelebratory:'We are here for you. Sending you all our love, strength and support during this time.'},
+  bereavement:{tag:'Bereavement Support',title:'You Are <span>Not Alone</span>',msgFormal:'During this time of grief, please know you have the full support of your team and organization.',msgWarm:'We hold you close in our hearts. Please take all the time you need — we are here for you always.',msgCelebratory:'Sending you strength and comfort. Please reach out whenever you need us — we are here.'},
+  crisis:{tag:'Support Message',title:'We Stand <span>Together</span>',msgFormal:'In this challenging time, the organization stands with you. Please reach out for any support needed.',msgWarm:'Difficult times remind us how much we mean to each other. We are here for you, always.',msgCelebratory:'We are one team, one family. In every challenge, we rise together. Strength and solidarity.'},
+};
+
+/* ========================================================
+   ELEMENT REFS
+   ======================================================== */
+const shell   = document.getElementById('shell');
+const blogo   = document.getElementById('blogo');
+const logoFile= document.getElementById('logoFile');
+const fOcc    = document.getElementById('fOcc');
+const fYrs    = document.getElementById('fYrs');
+const grpYrs  = document.getElementById('grpYrs');
+const fName   = document.getElementById('fName');
+const fFrom   = document.getElementById('fFrom');
+const fTone   = document.getElementById('fTone');
+const fMsg    = document.getElementById('fMsg');
+const ctrEl   = document.getElementById('ctr');
+const btnSave = document.getElementById('btnSave');
+const chipsEl = document.getElementById('chips');
+const btnGen  = document.getElementById('btnGen');
+const btnPNG  = document.getElementById('btnPNG');
+const btnClip = document.getElementById('btnClip');
+const btnPrint= document.getElementById('btnPrint');
+const btnWA   = document.getElementById('btnWA');
+const stage   = document.getElementById('stage');
+const loader  = document.getElementById('loader');
+const progBar = document.getElementById('progBar');
+const loaderMsg=document.getElementById('loaderMsg');
+const toast   = document.getElementById('toast');
+const togHist = document.getElementById('togHist');
+const histChev= document.getElementById('histChev');
+const hlist   = document.getElementById('hlist');
+const btnClrH = document.getElementById('btnClrHist');
+const fBdayMult   = document.getElementById('fBdayMult');
+const grpBdayMult = document.getElementById('grpBdayMult');
+
+let history_  = JSON.parse(localStorage.getItem('hrc_hist') || '[]');
+let savedNames= JSON.parse(localStorage.getItem('hrc_names') || '[]');
+let logoB64      = localStorage.getItem('hrc_logo') || '';
+let logoDirectSrc= '';
+let toastTmr     = null;
+let html2cvLoaded = false;
+const bdayPhotoData = {}; // keyed 0-4, value: { src: base64string }
+
+/* ── helpers ── */
+function san(s){ const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+
+function toast_(msg, err=false){
+  if(toastTmr) clearTimeout(toastTmr);
+  toast.textContent = msg;
+  toast.className = 'toast on' + (err?' err':'');
+  toastTmr = setTimeout(()=>{ toast.className='toast'; }, 3800);
+}
+
+function setProgress(p, msg){
+  progBar.style.width = p + '%';
+  if(msg) loaderMsg.textContent = msg;
+}
+
+/* ── Logo ── */
+// Try these filenames in order before falling back to uploaded logo
+const LOGO_CANDIDATES = ['Logo05.png','Logo05.PNG','Logo05.JPG','logo05.png','Logo5.png','Logo5.PNG','logo.png','Logo.png'];
+let logoAutoLoaded = false;
+
+function applyLogo(){
+  const src = logoB64 || logoDirectSrc;
+  if(src){
+    blogo.src = src;
+    blogo.style.display = 'block';
+  }
+}
+
+function tryAutoLoadLogo(idx){
+  if(idx >= LOGO_CANDIDATES.length){
+    // All candidates exhausted — fall back to localStorage upload
+    applyLogo();
+    return;
+  }
+  const img = new Image();
+  img.onload = () => {
+    // Found it — convert to base64 so it works in canvas export too
+    const cvs = document.createElement('canvas');
+    cvs.width = img.naturalWidth; cvs.height = img.naturalHeight;
+    const ctx = cvs.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    try {
+      logoB64 = cvs.toDataURL('image/png');
+      localStorage.setItem('hrc_logo', logoB64);
+      logoAutoLoaded = true;
+      applyLogo();
+    } catch(e){
+      // canvas taint on file:// — store path directly; use it in card generation
+      logoDirectSrc = LOGO_CANDIDATES[idx];
+      blogo.src = LOGO_CANDIDATES[idx];
+      blogo.style.display = 'block';
+      logoAutoLoaded = true;
+    }
+  };
+  img.onerror = () => tryAutoLoadLogo(idx + 1);
+  img.src = LOGO_CANDIDATES[idx];
+}
+
+// Immediately set Logo05.PNG as the direct source so generateCard works right away
+// tryAutoLoadLogo will upgrade to base64 if possible (needed for PNG export)
+logoDirectSrc = 'Logo05.PNG';
+
+// If no logo uploaded yet, try auto-detecting Logo05.PNG from same folder
+if(!logoB64){
+  tryAutoLoadLogo(0);
+} else {
+  applyLogo();
+}
+
+logoFile.onchange = e => {
+  const f = e.target.files[0];
+  if(!f) return;
+  if(!f.type.startsWith('image/')){ toast_('Please select an image file.', true); return; }
+  if(f.size > 2 * 1024 * 1024){ toast_('Logo file is too large (max 2 MB).', true); return; }
+  const r = new FileReader();
+  r.onload = ev => {
+    logoB64 = ev.target.result;
+    localStorage.setItem('hrc_logo', logoB64);
+    applyLogo();
+    toast_('Logo uploaded and saved!');
+  };
+  r.readAsDataURL(f);
+};
+
+/* ── Theme ── */
+document.querySelectorAll('.tdot').forEach(dot => {
+  dot.onclick = () => {
+    document.querySelectorAll('.tdot').forEach(d => d.classList.remove('on'));
+    dot.classList.add('on');
+    shell.className = 'shell ' + (dot.dataset.th || '');
+  };
+});
+
+/* ── Occasion change ── */
+fOcc.onchange = () => {
+  grpYrs.style.display = fOcc.value === 'workAnniversary' ? 'flex' : 'none';
+  const isBday = fOcc.value === 'birthday';
+  grpBdayMult.style.display = isBday ? 'flex' : 'none';
+  if (isBday) {
+    buildBdayPersonFields(parseInt(fBdayMult.value) || 1);
+  } else {
+    fBdayMult.value = '1';
+    buildBdayPersonFields(0);
+  }
+};
+fName.oninput = () => { ctrEl.textContent = fName.value.length + ' / 40'; };
+
+/* ── Birthday Multiple – field builder ── */
+fBdayMult.onchange = () => {
+  const count = parseInt(fBdayMult.value) || 1;
+  buildBdayPersonFields(count);
+};
+
+function buildBdayPersonFields(count) {
+  const container = document.getElementById('grpBdayPersons');
+  container.innerHTML = '';
+  if (count === 0) { container.style.display = 'none'; return; }
+  container.style.display = 'flex';
+  // Clear photo data for slots beyond count
+  for (let k in bdayPhotoData) { if (parseInt(k) >= count) delete bdayPhotoData[k]; }
+  for (let i = 0; i < count; i++) {
+    const hasImg = !!(bdayPhotoData[i] && bdayPhotoData[i].src);
+    const block = document.createElement('div');
+    block.className = 'bp-block';
+    if (count === 1) {
+      // Single birthday — dept + photo (name comes from Recipient Name field above)
+      block.innerHTML = `
+        <div class="bp-hd"><i class="fas fa-id-badge" style="font-size:8px;margin-right:5px"></i>Birthday Person Details <span style="font-weight:400;text-transform:none;letter-spacing:0;opacity:.45">(optional · personalises the card)</span></div>
+        <input type="text" class="ic" id="bdayDept0" placeholder="Department  e.g. Finance, Operations…" maxlength="40" autocomplete="off" style="padding:7px 11px;font-size:12px" value="${(bdayPhotoData[0]&&bdayPhotoData[0].dept)||''}">
+        <div class="bp-photo-wrap${hasImg?' has-img':''}" id="bdayWrap0">
+          <span class="bp-placeholder" style="display:flex;align-items:center;gap:6px;font-size:11px;pointer-events:none"><i class="fas fa-user-circle" style="font-size:13px"></i>Upload photo to personalise card</span>
+          <img class="bp-img" id="bdayImg0" src="${hasImg?bdayPhotoData[0].src:''}" alt="">
+          <input type="file" class="bp-upload-input" accept="image/*" data-idx="0">
+          <button type="button" class="bp-clear" data-idx="0" title="Remove photo">✕</button>
+        </div>`;
+    } else {
+      // 2–5 birthdays — name + dept + photo per person
+      block.innerHTML = `
+        <div class="bp-hd"><i class="fas fa-user" style="font-size:8px;margin-right:5px"></i>Person ${i+1}</div>
+        <input type="text" class="ic" id="bdayName${i}" placeholder="Name…" maxlength="30" autocomplete="off" style="padding:7px 11px;font-size:12px" value="${(bdayPhotoData[i]&&bdayPhotoData[i].name)||''}">
+        <input type="text" class="ic" id="bdayDept${i}" placeholder="Department  e.g. Finance, Operations…" maxlength="40" autocomplete="off" style="padding:6px 11px;font-size:11px;color:rgba(255,255,255,.7)" value="${(bdayPhotoData[i]&&bdayPhotoData[i].dept)||''}">
+        <div class="bp-photo-wrap${hasImg?' has-img':''}" id="bdayWrap${i}">
+          <span class="bp-placeholder" style="display:flex;align-items:center;gap:5px;font-size:11px;pointer-events:none"><i class="fas fa-camera" style="font-size:9px"></i>Upload Photo</span>
+          <img class="bp-img" id="bdayImg${i}" src="${hasImg?bdayPhotoData[i].src:''}" alt="">
+          <input type="file" class="bp-upload-input" accept="image/*" data-idx="${i}">
+          <button type="button" class="bp-clear" data-idx="${i}" title="Remove photo">✕</button>
+        </div>`;
+    }
+    // File upload
+    block.querySelector('.bp-upload-input').addEventListener('change', function(e) {
+      const f = e.target.files[0];
+      if (!f) return;
+      if (!f.type.startsWith('image/')) { toast_('Please select an image file.', true); return; }
+      if (f.size > 4 * 1024 * 1024) { toast_('Photo too large (max 4 MB).', true); return; }
+      const idx = parseInt(this.dataset.idx);
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const src = ev.target.result;
+        if (!bdayPhotoData[idx]) bdayPhotoData[idx] = {};
+        bdayPhotoData[idx].src = src;
+        const imgEl = document.getElementById('bdayImg' + idx);
+        const wrapEl = document.getElementById('bdayWrap' + idx);
+        if (imgEl) imgEl.src = src;
+        if (wrapEl) wrapEl.classList.add('has-img');
+      };
+      reader.readAsDataURL(f);
+    });
+    // Persist name & dept on input so values survive count switches
+    const nameInp = block.querySelector(`#bdayName${i}`);
+    if (nameInp) nameInp.addEventListener('input', function() {
+      if (!bdayPhotoData[i]) bdayPhotoData[i] = {};
+      bdayPhotoData[i].name = this.value;
+    });
+    const deptInp = block.querySelector(`#bdayDept${i}`);
+    if (deptInp) deptInp.addEventListener('input', function() {
+      if (!bdayPhotoData[i]) bdayPhotoData[i] = {};
+      bdayPhotoData[i].dept = this.value;
+    });
+    // Clear button
+    block.querySelector('.bp-clear').addEventListener('click', function(e) {
+      e.preventDefault(); e.stopPropagation();
+      const idx = parseInt(this.dataset.idx);
+      if (bdayPhotoData[idx]) delete bdayPhotoData[idx].src;
+      const imgEl = document.getElementById('bdayImg' + idx);
+      const wrapEl = document.getElementById('bdayWrap' + idx);
+      const fi = wrapEl ? wrapEl.querySelector('.bp-upload-input') : null;
+      if (imgEl) imgEl.src = '';
+      if (wrapEl) wrapEl.classList.remove('has-img');
+      if (fi) fi.value = '';
+    });
+    container.appendChild(block);
+  }
+}
+
+function getBdayPersons(count) {
+  const persons = [];
+  for (let i = 0; i < count; i++) {
+    const nameEl = document.getElementById('bdayName' + i);
+    const deptEl = document.getElementById('bdayDept' + i);
+    const name = nameEl ? (nameEl.value.trim() || ('Team Member ' + (i+1))) : ('Team Member ' + (i+1));
+    const dept = deptEl ? deptEl.value.trim() : ((bdayPhotoData[i] && bdayPhotoData[i].dept) || '');
+    const imgSrc = (bdayPhotoData[i] && bdayPhotoData[i].src) ? bdayPhotoData[i].src : '';
+    persons.push({ name, dept, imgSrc });
+  }
+  return persons;
+}
+
+/* ── Multi-birthday card renderer ── */
+function renderMultiBdayCard(persons, fromText, msgText, logoSrc) {
+  const count = persons.length;
+  const year  = new Date().getFullYear();
+
+  const logoHTML = logoSrc
+    ? `<img src="${logoSrc}" alt="Company Logo" style="height:50px;width:auto;max-width:120px;object-fit:contain;display:block;">`
+    : `<div style="font-family:'Playfair Display',serif;font-size:15px;color:#d4a843;letter-spacing:1px;">HR Connect</div>`;
+
+  function initials(name) {
+    return (name||'TM').split(' ').filter(Boolean).map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  }
+
+  function photoCell(p, sz) {
+    const nm  = san(p.name || 'Team Member');
+    const ini = initials(p.name || 'TM');
+    const ring = sz + 10;
+    const deptLine = p.dept
+      ? `<div style="font-size:8px;color:rgba(212,168,67,.72);text-align:center;max-width:${ring+14}px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.4px;font-style:italic;margin-top:-1px;">${san(p.dept)}</div>`
+      : '';
+    const inner = p.imgSrc
+      ? `<img src="${p.imgSrc}" style="width:${sz}px;height:${sz}px;object-fit:cover;border-radius:50%;display:block;" alt="${nm}">`
+      : `<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:linear-gradient(135deg,rgba(184,138,45,.28) 0%,rgba(11,61,46,.65) 100%);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:${Math.round(sz*0.28)}px;color:#d4a843;font-weight:700;">${ini}</div>`;
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;">
+      <div style="width:${ring}px;height:${ring}px;border-radius:50%;border:2.5px solid #b88a2d;padding:2px;background:rgba(184,138,45,.06);display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(184,138,45,.22);">
+        ${inner}
+      </div>
+      <div style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;color:#fff;text-align:center;max-width:${ring+16}px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;">${nm}</div>
+      ${deptLine}
+    </div>`;
+  }
+
+  // Grid layouts per count
+  let photoGrid = '';
+  if (count === 2) {
+    photoGrid = `<div style="display:flex;gap:48px;align-items:flex-start;justify-content:center;">${persons.map(p=>photoCell(p,116)).join('')}</div>`;
+  } else if (count === 3) {
+    photoGrid = `<div style="display:flex;gap:32px;align-items:flex-start;justify-content:center;">${persons.map(p=>photoCell(p,102)).join('')}</div>`;
+  } else if (count === 4) {
+    const cells = persons.map(p=>photoCell(p,96)).join('');
+    photoGrid = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 48px;justify-items:center;">${cells}</div>`;
+  } else {
+    // 5: top row 3, bottom row 2 centred
+    const top = persons.slice(0,3).map(p=>photoCell(p,86)).join('');
+    const bot = persons.slice(3).map(p=>photoCell(p,86)).join('');
+    photoGrid = `<div style="display:flex;flex-direction:column;gap:10px;align-items:center;">
+      <div style="display:flex;gap:22px;align-items:flex-start;justify-content:center;">${top}</div>
+      <div style="display:flex;gap:22px;align-items:flex-start;justify-content:center;">${bot}</div>
+    </div>`;
+  }
+
+  const defaultMsg = `Warmest birthday wishes to all our incredible team members celebrating their special day today. Your dedication, energy, and spirit make our workplace truly exceptional — keep shining bright!`;
+  const msg = msgText || defaultMsg;
+
+  // Background SVG (decorative layer)
+  const bgSvg = `<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 720 500" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="mbd_bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#0a1628"/><stop offset="55%" stop-color="#0B3D2E"/><stop offset="100%" stop-color="#082d22"/>
+      </linearGradient>
+      <radialGradient id="mbd_glow" cx="50%" cy="38%" r="45%">
+        <stop offset="0%" stop-color="rgba(184,138,45,.09)"/><stop offset="100%" stop-color="rgba(184,138,45,0)"/>
+      </radialGradient>
+    </defs>
+    <rect width="720" height="500" fill="url(#mbd_bg)"/>
+    <rect width="720" height="500" fill="url(#mbd_glow)"/>
+    <path d="M0,0 L52,0 L52,3 L3,3 L3,52 L0,52 Z" fill="rgba(184,138,45,.45)"/>
+    <path d="M720,0 L668,0 L668,3 L717,3 L717,52 L720,52 Z" fill="rgba(184,138,45,.45)"/>
+    <path d="M0,500 L52,500 L52,497 L3,497 L3,448 L0,448 Z" fill="rgba(184,138,45,.45)"/>
+    <path d="M720,500 L668,500 L668,497 L717,497 L717,448 L720,448 Z" fill="rgba(184,138,45,.45)"/>
+    <rect x="66" y="94" width="7" height="7" rx="1.5" fill="rgba(255,235,59,.28)" transform="rotate(28 69 97)"/>
+    <rect x="636" y="74" width="8" height="8" rx="1.5" fill="rgba(255,182,193,.22)" transform="rotate(-18 640 78)"/>
+    <rect x="106" y="388" width="6" height="6" rx="1" fill="rgba(135,206,250,.2)" transform="rotate(44 109 391)"/>
+    <rect x="596" y="402" width="7" height="7" rx="1.5" fill="rgba(255,235,59,.2)" transform="rotate(14 599 405)"/>
+    <circle cx="42" cy="202" r="3" fill="rgba(255,255,255,.055)"/>
+    <circle cx="678" cy="258" r="4" fill="rgba(255,255,255,.055)"/>
+    <circle cx="66" cy="446" r="2.5" fill="rgba(184,138,45,.18)"/>
+    <circle cx="652" cy="156" r="3" fill="rgba(184,138,45,.16)"/>
+    <ellipse cx="360" cy="422" rx="210" ry="14" fill="rgba(184,138,45,.04)"/>
+  </svg>`;
+
+  return `<div id="card" data-multi-bday="true"
+    style="width:min(720px,100%);height:500px;position:relative;overflow:hidden;
+      border:2.5px solid #b88a2d;border-radius:6px;
+      box-shadow:var(--shadow);outline:2px solid rgba(184,138,45,.18);outline-offset:4px;
+      display:flex;flex-direction:column;background:#0a1628;color:#fff;">
+    ${bgSvg}
+    <!-- Header -->
+    <div style="position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:12px 24px 10px;border-bottom:1px solid rgba(184,138,45,.28);background:rgba(0,0,0,.2);flex-shrink:0;">
+      ${logoHTML}
+      <div style="text-align:right;">
+        <div style="font-family:'Playfair Display',serif;font-size:21px;color:#d4a843;letter-spacing:.5px;line-height:1.2;">Birthday Celebrations</div>
+        <div style="font-size:8px;letter-spacing:2.5px;color:rgba(212,168,67,.52);text-transform:uppercase;margin-top:3px;">People &amp; Culture · AIS Windows</div>
+        <div style="height:2px;width:42px;background:linear-gradient(90deg,transparent,#b88a2d);margin-top:5px;margin-left:auto;"></div>
+      </div>
+    </div>
+    <!-- Photo grid -->
+    <div style="position:relative;z-index:2;flex:1;display:flex;align-items:center;justify-content:center;padding:14px 24px 6px;">
+      ${photoGrid}
+    </div>
+    <!-- Message + sender -->
+    <div style="position:relative;z-index:2;padding:8px 28px 10px;border-top:1px solid rgba(184,138,45,.18);flex-shrink:0;">
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;line-height:1.52;color:rgba(255,255,255,.72);margin-bottom:8px;">${san(msg)}</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:10px;font-weight:700;color:#b88a2d;text-transform:uppercase;letter-spacing:.8px;">${san(fromText)}</div>
+          <div style="font-size:8px;color:rgba(255,255,255,.27);letter-spacing:.4px;margin-top:1px;">AIS WINDOWS · ASAHI INDIA GLASS LTD.</div>
+        </div>
+        <div style="width:54px;height:54px;border:2px solid #b88a2d;border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;transform:rotate(-12deg);background:rgba(0,0,0,.25);flex-shrink:0;">
+          <div style="font-size:6px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#b88a2d;line-height:1.38;">${year}<br>✦<br>HR<br>Connect</div>
+        </div>
+      </div>
+    </div>
+    <!-- Footer -->
+    <div style="position:relative;z-index:2;background:#0a1628;color:#b88a2d;padding:6px 20px;text-align:center;font-size:9px;letter-spacing:2px;font-weight:500;border-top:1.5px solid #b88a2d;flex-shrink:0;">
+      Excellence in Every Detail &nbsp;·&nbsp; Since 1987
+    </div>
+  </div>`;
+}
+
+/* ── Saved names ── */
+function renderChips(){
+  chipsEl.innerHTML = '';
+  savedNames.forEach((nm, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.innerHTML = `<span>${san(nm)}</span><span class="chip-x" data-i="${i}" title="Remove">✕</span>`;
+    chip.querySelector('span:first-child').onclick = () => { fName.value = nm; fName.oninput(); };
+    chip.querySelector('.chip-x').onclick = e => {
+      e.stopPropagation();
+      savedNames.splice(i, 1);
+      localStorage.setItem('hrc_names', JSON.stringify(savedNames));
+      renderChips();
+    };
+    chipsEl.appendChild(chip);
+  });
+}
+renderChips();
+
+btnSave.onclick = () => {
+  const nm = fName.value.trim();
+  if(!nm){ toast_('Enter a name first.', true); return; }
+  if(savedNames.includes(nm)){ toast_('Name already saved!'); return; }
+  if(savedNames.length >= 12){ toast_('Max 12 saved names. Remove one first.', true); return; }
+  savedNames.push(nm);
+  localStorage.setItem('hrc_names', JSON.stringify(savedNames));
+  renderChips();
+  toast_('Name saved to quick list!');
+};
+
+/* ── History ── */
+function saveHist(item){
+  history_ = history_.filter(c => !(c.occ===item.occ && c.name===item.name));
+  history_.unshift(item);
+  if(history_.length > 10) history_.pop();
+  localStorage.setItem('hrc_hist', JSON.stringify(history_));
+  renderHist();
+}
+
+function renderHist(){
+  if(!history_.length){
+    hlist.innerHTML = '<div style="font-size:11px;opacity:.35;padding:8px 0">No recent cards</div>';
+    btnClrH.style.display = 'none';
+  } else {
+    hlist.innerHTML = history_.map((item,i) =>
+      `<div class="hi" onclick="window._loadHist(${i})">
+        <div class="hn">${san(item.name)}</div>
+        <div class="ht">${san(item.tag)}</div>
+      </div>`
+    ).join('');
+    btnClrH.style.display = 'block';
+  }
+}
+renderHist();
+
+window._loadHist = i => {
+  if(!confirm('Load this card? Unsaved changes will be replaced.')) return;
+  const item = history_[i];
+  fOcc.value = item.occ; fName.value = item.name; fFrom.value = item.from;
+  fTone.value = item.tone; fMsg.value = item.customMsg || '';
+  fYrs.value = item.years || 1;
+  // Reset birthday multiple to single on history load
+  if (fBdayMult) { fBdayMult.value = '1'; buildBdayPersonFields(0); }
+  fOcc.onchange(); fName.oninput();
+  generateCard(true);
+};
+
+togHist.onclick = () => {
+  const open = hlist.classList.toggle('open');
+  histChev.className = 'fas ' + (open ? 'fa-chevron-up' : 'fa-chevron-down');
+};
+btnClrH.onclick = () => {
+  if(!confirm('Clear all card history?')) return;
+  history_ = []; localStorage.removeItem('hrc_hist');
+  renderHist(); toast_('History cleared.');
+};
+
+/* ── Generate Card ── */
+function generateCard(isReload=false){
+  const occ  = fOcc.value;
+  const name = fName.value.trim() || 'Team Member';
+  const from = fFrom.value.trim() || 'People & Culture Team';
+  const tone = fTone.value;
+  const cMsg = fMsg.value.trim();
+  const yrs  = Math.min(50, Math.max(1, parseInt(fYrs.value)||1));
+  const tmpl = T[occ] || T.birthday;
+
+  /* ── Multi-birthday mode ── */
+  if (occ === 'birthday' && fBdayMult && fBdayMult.value !== '1') {
+    const count   = parseInt(fBdayMult.value) || 2;
+    const persons = getBdayPersons(count);
+    const logoSrc = logoB64 || logoDirectSrc;
+    stage.innerHTML = renderMultiBdayCard(persons, from, cMsg, logoSrc);
+    btnPNG.disabled = false; btnClip.disabled = false; btnPrint.disabled = false;
+    if (!isReload) {
+      const nameTag = persons.map(p=>p.name).join(', ');
+      saveHist({ occ, name: nameTag, from, tone, customMsg: cMsg, years: yrs, tag: 'Birthday Celebrations' });
+    }
+    return;
+  }
+
+  let title = tmpl.title.replace(/<span>/g,'<span style="color:#b88a2d">');
+  if(occ === 'workAnniversary'){
+    title = `Celebrating <span style="color:#b88a2d">${yrs} ${yrs===1?'Year':'Years'}</span> of Excellence`;
+  }
+  const msg = cMsg || tmpl['msg'+tone] || tmpl.msgFormal;
+  const visual = getVisual(occ);
+
+  // Single birthday: use uploaded photo as the left panel if available
+  const singleBdayPhoto = (occ === 'birthday' && bdayPhotoData[0] && bdayPhotoData[0].src)
+    ? bdayPhotoData[0].src : null;
+  const visualContent = singleBdayPhoto
+    ? `<img src="${singleBdayPhoto}" style="width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0;">`
+    : visual;
+
+  // Single birthday dept label
+  const singleBdayDept = occ === 'birthday'
+    ? (() => { const el = document.getElementById('bdayDept0'); return el ? el.value.trim() : ''; })()
+    : '';
+  const deptBadge = singleBdayDept
+    ? `<div style="display:inline-block;font-size:10px;font-weight:600;color:#6d9e6b;letter-spacing:.7px;font-style:italic;margin-top:-2px;margin-bottom:5px;">${san(singleBdayDept)}</div>`
+    : '';
+
+  const year = new Date().getFullYear();
+  const logoSrc = logoB64 || logoDirectSrc;
+  const logoHTML = logoSrc
+    ? `<img src="${logoSrc}" alt="Company Logo" class="clogo" style="height:90px;width:auto;max-width:150px;object-fit:contain;">`
+    : `<div style="font-family:'Playfair Display',serif;font-size:16px;color:#0B3D2E;letter-spacing:1px;padding-top:8px;">HR Connect</div>`;
+
+  stage.innerHTML = `
+  <div id="card">
+    <div class="cv">${visualContent}<div class="cv-ov"></div></div>
+    <div class="cc">
+      <div class="chr">
+        ${logoHTML}
+        <div class="chm"><div class="csub">People & Culture</div><div class="cline"></div></div>
+      </div>
+      <div>
+        <div class="ctag">${san(tmpl.tag)}</div>
+        <div class="crcp">Dear ${san(name)},</div>
+        ${deptBadge}
+        <h1 class="ctitle">${title}</h1>
+        <p class="cmsg">${san(msg)}</p>
+      </div>
+      <div class="csig">
+        <div class="csig-n">${san(from)}</div>
+        <div class="csig-d">AIS WINDOWS · ASAHI INDIA GLASS LTD.</div>
+      </div>
+    </div>
+    <div class="stamp">
+      <div class="stamp-inner">${year}<br>✦<br>HR<br>Connect</div>
+    </div>
+    <div class="cfoot">
+      <span>Excellence in Every Detail</span>&nbsp;·&nbsp;<span>Since 1987</span>
+    </div>
+  </div>`;
+
+  btnPNG.disabled = false; btnClip.disabled = false; btnPrint.disabled = false;
+
+  if(!isReload){
+    saveHist({ occ, name, from, tone, customMsg: cMsg, years: yrs, tag: tmpl.tag });
+  }
+}
+
+btnGen.onclick = () => generateCard(false);
+
+/* ── html2canvas loader ── */
+async function ensureH2C(){
+  if(window.html2canvas) return true;
+  if(html2cvLoaded){
+    return new Promise(res => {
+      const chk = setInterval(()=>{ if(window.html2canvas){clearInterval(chk);res(true);} }, 80);
+      setTimeout(()=>{ clearInterval(chk); res(false); }, 10000);
+    });
+  }
+  html2cvLoaded = true;
+  return new Promise(res => {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    s.onload = ()=>res(true); s.onerror=()=>{ html2cvLoaded=false; res(false); };
+    document.head.appendChild(s);
+  });
+}
+
+/* ── Core render to canvas ── */
+async function renderToCanvas(){
+  const card = document.getElementById('card');
+  if(!card) throw new Error('No card');
+
+  loader.classList.add('on'); setProgress(10, 'LOADING EXPORTER…');
+  const ok = await ensureH2C();
+  if(!ok){ loader.classList.remove('on'); throw new Error('Could not load html2canvas'); }
+
+  setProgress(35, 'PREPARING CARD…');
+  const W=720, H=500;
+
+  /* off-screen wrapper */
+  const wrap = document.createElement('div');
+  Object.assign(wrap.style,{
+    position:'fixed', top:'0', left:'0', width:W+'px', height:H+'px',
+    overflow:'hidden', zIndex:'99999', background:'#fdfbf6',
+    pointerEvents:'none'
+  });
+
+  const clone = card.cloneNode(true);
+  const isMultiBday = clone.dataset.multiBday === 'true';
+  Object.assign(clone.style,{
+    width:W+'px', height:H+'px', minWidth:W+'px', maxWidth:W+'px',
+    minHeight:H+'px', maxHeight:H+'px',
+    display:'flex', flexDirection: isMultiBday ? 'column' : 'row', borderRadius:'0',
+    boxShadow:'none', animation:'none', transition:'none', flex:'none',
+    overflow:'hidden', position:'relative', border:'none', outline:'none',
+  });
+
+  const cv2 = clone.querySelector('.cv');
+  if(cv2) Object.assign(cv2.style,{ width:'302px', minWidth:'302px', height:'100%', overflow:'hidden', flexShrink:'0' });
+  const cc2 = clone.querySelector('.cc');
+  if(cc2) Object.assign(cc2.style,{ flex:'1', display:'flex', flexDirection:'column', padding:'28px 38px 52px' });
+
+  clone.querySelectorAll('*').forEach(el=>{ el.style.animation='none'; el.style.transition='none'; });
+  wrap.appendChild(clone); document.body.appendChild(wrap);
+
+  await new Promise(r=>setTimeout(r, 400));
+  setProgress(60, 'RENDERING…');
+
+  const canvas = await html2canvas(clone, {
+    scale:2, useCORS:true, allowTaint:true,
+    backgroundColor:'#fdfbf6', logging:false,
+    width:W, height:H, windowWidth:W, windowHeight:H,
+    ignoreElements: el => el.classList && el.classList.contains('cv-ov'),
+  });
+
+  setProgress(90, 'FINALISING…');
+  document.body.removeChild(wrap);
+  loader.classList.remove('on');
+  return canvas;
+}
+
+/* ── Export PNG ── */
+btnPNG.onclick = async () => {
+  if(!document.getElementById('card')){ toast_('Generate a card first.', true); return; }
+  const occ  = fOcc.value;
+  const name = (fName.value.trim()||'Card').replace(/[^a-zA-Z0-9 _-]/g,'').trim().replace(/ +/g,'-');
+  const occLabel = fOcc.options[fOcc.selectedIndex]?.text || occ;
+  const ts   = new Date().toISOString().slice(0,10);
+  const fileName = `HR-${name}-${occLabel.replace(/[^a-zA-Z0-9]/g,'-').replace(/-+/g,'-')}-${ts}.png`;
+  try {
+    const canvas = await renderToCanvas();
+    setProgress(95, 'SAVING…');
+    canvas.toBlob(blob=>{
+      if(!blob){ toast_('Export failed — please try Print PDF.', true); return; }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.download = fileName; a.href = url;
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1000);
+      toast_('PNG exported: ' + fileName);
+      setProgress(100,'DONE!');
+    }, 'image/png', 1.0);
+  } catch(e){
+    console.error(e);
+    loader.classList.remove('on');
+    toast_('Export failed. Try Print PDF instead.', true);
+  }
+};
+
+/* ── Copy to Clipboard ── */
+btnClip.onclick = async () => {
+  if(!document.getElementById('card')){ toast_('Generate a card first.', true); return; }
+  if(!navigator.clipboard?.write){ toast_('Copy not supported in this browser. Use Export PNG instead.', true); return; }
+  try {
+    const canvas = await renderToCanvas();
+    canvas.toBlob(async blob => {
+      try {
+        await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+        toast_('Card copied to clipboard!');
+      } catch(e){
+        toast_('Clipboard write failed. Use Export PNG instead.', true);
+      }
+    }, 'image/png', 1.0);
+  } catch(e){
+    console.error(e);
+    loader.classList.remove('on');
+    toast_('Copy failed. Use Export PNG instead.', true);
+  }
+};
+
+/* ── Print ── */
+btnPrint.onclick = () => {
+  if(!document.getElementById('card')){ toast_('Generate a card first.', true); return; }
+  window.print();
+};
+
+/* ── WhatsApp ── */
+btnWA.onclick = () => {
+  const isMultiBday = fOcc.value === 'birthday' && fBdayMult && fBdayMult.value !== '1';
+  const tone    = fTone.value;
+  const occText = fOcc.options[fOcc.selectedIndex]?.text || 'Special Occasion';
+  const tmpl    = T[fOcc.value] || T.birthday;
+  let recipient = (fName.value || 'Team Member').trim();
+  let msgBody   = fMsg.value.trim() || tmpl['msg'+tone] || tmpl.msgFormal;
+  if (isMultiBday) {
+    const count = parseInt(fBdayMult.value) || 2;
+    const persons = getBdayPersons(count);
+    const names = persons.map(p=>p.name).filter(n=>n && !n.startsWith('Team Member'));
+    if (names.length) recipient = names.join(', ');
+    if (!fMsg.value.trim()) msgBody = `Warmest birthday wishes to all our incredible team members celebrating their special day today. Your dedication and spirit make our workplace truly exceptional — keep shining!`;
+  }
+  const txt = `🎉 *${occText} – HR Connect*\n\nDear *${recipient}*,\n\n${msgBody}\n\n— ${fFrom.value||'People & Culture Team'}\nAIS Windows | HR Connect`;
+  window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
+};
+
+/* ── Init ── */
+fOcc.onchange();
+fName.oninput();
+
+})();
+</script>
+</body>
+</html>
