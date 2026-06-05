@@ -1596,7 +1596,7 @@ function renderMultiBdayCard(persons, fromText, msgText, logoSrc) {
   const year  = new Date().getFullYear();
 
   const logoHTML = logoSrc
-    ? `<img src="${logoSrc}" alt="Company Logo" style="height:50px;width:auto;max-width:120px;object-fit:contain;display:block;">`
+    ? `<div style="background:#fff;border-radius:8px;padding:6px 12px;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);"><img src="${logoSrc}" alt="Company Logo" style="height:42px;width:auto;max-width:110px;object-fit:contain;display:block;"></div>`
     : `<div style="font-family:'Playfair Display',serif;font-size:15px;color:#d4a843;letter-spacing:1px;">HR Connect</div>`;
 
   function initials(name) {
@@ -1936,10 +1936,18 @@ async function renderToCanvas(){
   setProgress(60, 'RENDERING…');
 
   const canvas = await html2canvas(clone, {
-    scale:2, useCORS:true, allowTaint:true,
-    backgroundColor:'#fdfbf6', logging:false,
+    scale:2, useCORS:true, allowTaint:false,
+    backgroundColor: isMultiBday ? '#0a1628' : '#fdfbf6',
+    logging:false,
     width:W, height:H, windowWidth:W, windowHeight:H,
     ignoreElements: el => el.classList && el.classList.contains('cv-ov'),
+    onclone: (clonedDoc) => {
+      /* Strip external <link> stylesheets from html2canvas's internal clone.
+         On file://, every CDN fetch is cross-origin and taints the canvas.
+         Fonts are already loaded + applied by the browser; removing these
+         links only stops html2canvas from re-fetching them. */
+      clonedDoc.querySelectorAll('link[rel="stylesheet"]').forEach(l => l.remove());
+    },
   });
 
   setProgress(90, 'FINALISING…');
@@ -1959,16 +1967,16 @@ btnPNG.onclick = async () => {
   try {
     const canvas = await renderToCanvas();
     setProgress(95, 'SAVING…');
-    canvas.toBlob(blob=>{
-      if(!blob){ toast_('Export failed — please try Print PDF.', true); return; }
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.download = fileName; a.href = url;
-      document.body.appendChild(a); a.click();
-      setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1000);
-      toast_('PNG exported: ' + fileName);
-      setProgress(100,'DONE!');
-    }, 'image/png', 1.0);
+    const blob = await new Promise((res,rej)=>
+      canvas.toBlob(b => b ? res(b) : rej(new Error('toBlob returned null')), 'image/png', 1.0)
+    );
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.download = fileName; a.href = url;
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1000);
+    toast_('PNG exported: ' + fileName);
+    setProgress(100,'DONE!');
   } catch(e){
     console.error(e);
     loader.classList.remove('on');
@@ -1982,14 +1990,11 @@ btnClip.onclick = async () => {
   if(!navigator.clipboard?.write){ toast_('Copy not supported in this browser. Use Export PNG instead.', true); return; }
   try {
     const canvas = await renderToCanvas();
-    canvas.toBlob(async blob => {
-      try {
-        await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
-        toast_('Card copied to clipboard!');
-      } catch(e){
-        toast_('Clipboard write failed. Use Export PNG instead.', true);
-      }
-    }, 'image/png', 1.0);
+    const blob = await new Promise((res,rej)=>
+      canvas.toBlob(b => b ? res(b) : rej(new Error('toBlob returned null')), 'image/png', 1.0)
+    );
+    await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+    toast_('Card copied to clipboard!');
   } catch(e){
     console.error(e);
     loader.classList.remove('on');
