@@ -1591,12 +1591,12 @@ function getBdayPersons(count) {
 }
 
 /* ── Multi-birthday card renderer ── */
-function renderMultiBdayCard(persons, fromText, msgText, logoSrc) {
+function renderMultiBdayCard(persons, fromText, msgText, logoSrc, tone) {
   const count = persons.length;
   const year  = new Date().getFullYear();
 
   const logoHTML = logoSrc
-    ? `<div style="background:#fff;border-radius:8px;padding:6px 12px;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);"><img src="${logoSrc}" alt="Company Logo" style="height:42px;width:auto;max-width:110px;object-fit:contain;display:block;"></div>`
+    ? `<img src="${logoSrc}" alt="Company Logo" style="height:50px;width:auto;max-width:120px;object-fit:contain;display:block;">`
     : `<div style="font-family:'Playfair Display',serif;font-size:15px;color:#d4a843;letter-spacing:1px;">HR Connect</div>`;
 
   function initials(name) {
@@ -1641,7 +1641,12 @@ function renderMultiBdayCard(persons, fromText, msgText, logoSrc) {
     </div>`;
   }
 
-  const defaultMsg = `Warmest birthday wishes to all our incredible team members celebrating their special day today. Your dedication, energy, and spirit make our workplace truly exceptional — keep shining bright!`;
+  const defaultMsgs = {
+    Formal:      'On behalf of our People & Culture team, we extend warmest birthday wishes to all our exceptional colleagues celebrating today. Your dedication and professionalism inspire us every day.',
+    Warm:        'Happy Birthday to all our amazing birthday stars! We are so grateful for each of you — your warmth, energy and spirit make our workplace truly extraordinary. Wishing you a wonderful day!',
+    Celebratory: 'It\'s celebration time! Wishing all our incredible birthday stars a day as brilliant and joyful as they are. You make every day vibrant, exciting and unforgettable — cheers to you all! 🎉'
+  };
+  const defaultMsg = defaultMsgs[tone] || defaultMsgs.Formal;
   const msg = msgText || defaultMsg;
 
   // Background SVG (decorative layer)
@@ -1802,7 +1807,7 @@ function generateCard(isReload=false){
     const count   = parseInt(fBdayMult.value) || 2;
     const persons = getBdayPersons(count);
     const logoSrc = logoB64 || logoDirectSrc;
-    stage.innerHTML = renderMultiBdayCard(persons, from, cMsg, logoSrc);
+    stage.innerHTML = renderMultiBdayCard(persons, from, cMsg, logoSrc, tone);
     btnPNG.disabled = false; btnClip.disabled = false; btnPrint.disabled = false;
     if (!isReload) {
       const nameTag = persons.map(p=>p.name).join(', ');
@@ -1936,18 +1941,10 @@ async function renderToCanvas(){
   setProgress(60, 'RENDERING…');
 
   const canvas = await html2canvas(clone, {
-    scale:2, useCORS:true, allowTaint:false,
-    backgroundColor: isMultiBday ? '#0a1628' : '#fdfbf6',
-    logging:false,
+    scale:2, useCORS:true, allowTaint:true,
+    backgroundColor:'#fdfbf6', logging:false,
     width:W, height:H, windowWidth:W, windowHeight:H,
     ignoreElements: el => el.classList && el.classList.contains('cv-ov'),
-    onclone: (clonedDoc) => {
-      /* Strip external <link> stylesheets from html2canvas's internal clone.
-         On file://, every CDN fetch is cross-origin and taints the canvas.
-         Fonts are already loaded + applied by the browser; removing these
-         links only stops html2canvas from re-fetching them. */
-      clonedDoc.querySelectorAll('link[rel="stylesheet"]').forEach(l => l.remove());
-    },
   });
 
   setProgress(90, 'FINALISING…');
@@ -1967,16 +1964,16 @@ btnPNG.onclick = async () => {
   try {
     const canvas = await renderToCanvas();
     setProgress(95, 'SAVING…');
-    const blob = await new Promise((res,rej)=>
-      canvas.toBlob(b => b ? res(b) : rej(new Error('toBlob returned null')), 'image/png', 1.0)
-    );
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.download = fileName; a.href = url;
-    document.body.appendChild(a); a.click();
-    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1000);
-    toast_('PNG exported: ' + fileName);
-    setProgress(100,'DONE!');
+    canvas.toBlob(blob=>{
+      if(!blob){ toast_('Export failed — please try Print PDF.', true); return; }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.download = fileName; a.href = url;
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 1000);
+      toast_('PNG exported: ' + fileName);
+      setProgress(100,'DONE!');
+    }, 'image/png', 1.0);
   } catch(e){
     console.error(e);
     loader.classList.remove('on');
@@ -1990,11 +1987,14 @@ btnClip.onclick = async () => {
   if(!navigator.clipboard?.write){ toast_('Copy not supported in this browser. Use Export PNG instead.', true); return; }
   try {
     const canvas = await renderToCanvas();
-    const blob = await new Promise((res,rej)=>
-      canvas.toBlob(b => b ? res(b) : rej(new Error('toBlob returned null')), 'image/png', 1.0)
-    );
-    await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
-    toast_('Card copied to clipboard!');
+    canvas.toBlob(async blob => {
+      try {
+        await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+        toast_('Card copied to clipboard!');
+      } catch(e){
+        toast_('Clipboard write failed. Use Export PNG instead.', true);
+      }
+    }, 'image/png', 1.0);
   } catch(e){
     console.error(e);
     loader.classList.remove('on');
