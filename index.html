@@ -1810,7 +1810,9 @@ function buildLandscape(s){
       <h1 class="ctitle">${composeTitle(s)}</h1>
       <p class="cmsg">${composeMsg(s)}</p>
     </div>
-    ${SEAL}${FOOT}`;
+    <div class="csig"><div class="csig-n">${san(s.from)}</div><div class="csig-d">AIS WINDOWS · ASAHI INDIA GLASS LTD.</div></div>
+  </div>
+  ${SEAL}${FOOT}`;
 }
 
 /* ── SQUARE / STORY (stacked) ── */
@@ -2295,7 +2297,7 @@ btnWA.onclick=()=>{
   if(s.occasion==='birthday' && s.bdayCount>1){ const names=getBdayPersons(s.bdayCount).map(p=>p.name).filter(Boolean); who=names.join(', ')||'Team'; }
   let body=s.customMsg ? s.customMsg : (t['msg'+s.tone]||t.msgFormal);
   if(!s.emoji) body=stripEmoji(body);
-  const txt='*'+occLabel(s.occasion)+'*\n\nDear '+who+',\n'+body+'\n\n— '+s.from+'\nAIS Windows · Asahi India Glass Ltd.';
+  const txt='*'+occLabel(s.occasion)+'*\n\nDear '+who+',\n'+body+'\n\n— '+s.from+'.';
   window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
   saveHist(histItem(s,'WhatsApp'));
 };
