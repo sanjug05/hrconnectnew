@@ -159,7 +159,38 @@ select.ic option{background:var(--PD);color:#fff;}
 .accent-row input[type=color]{width:46px;height:34px;border:1px solid rgba(184,138,45,.35);border-radius:8px;background:transparent;cursor:pointer;padding:2px;}
 .logo-drop{border:1.5px dashed rgba(184,138,45,.3);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:.2s;font-size:11px;color:rgba(255,255,255,.55);}
 .logo-drop:hover{border-color:var(--G);color:var(--G);background:rgba(184,138,45,.05);}
-.logo-prev{max-height:42px;margin:0 auto 6px;display:block;}
+.logo-prev{max-height:42px;margin:0 auto 6px;display:block;background:#fff;border-radius:6px;padding:8px 14px;box-sizing:content-box;}
+
+/* ─────────────── ADVANCED OPTIONS DISCLOSURE ─────────────── */
+.adv-details{border:1px solid rgba(184,138,45,.22);border-radius:9px;padding:0 12px;background:rgba(255,255,255,.03);}
+.adv-details summary{cursor:pointer;padding:10px 0;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--GL);list-style:none;display:flex;align-items:center;gap:7px;user-select:none;}
+.adv-details summary::-webkit-details-marker{display:none;}
+.adv-details summary::before{content:'\25B8';display:inline-block;transition:transform .2s var(--ease);font-size:11px;}
+.adv-details[open] summary::before{transform:rotate(90deg);}
+.adv-details .adv-body{display:flex;flex-direction:column;gap:12px;padding-bottom:12px;}
+
+/* ─────────────── OCCASION PICKER (categorised + searchable) ─────────────── */
+.occ-picker{position:relative;}
+.occ-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(184,138,45,.28);padding:10px 13px;border-radius:9px;color:#fff;font-family:inherit;font-size:13px;cursor:pointer;transition:.22s var(--ease);text-align:left;}
+.occ-trigger:hover,.occ-trigger.open{border-color:var(--G);background:rgba(255,255,255,.1);}
+.occ-trigger .occ-cat{display:block;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--GL);opacity:.75;margin-bottom:1px;}
+.occ-trigger i{font-size:11px;opacity:.6;transition:transform .2s;flex-shrink:0;}
+.occ-trigger.open i{transform:rotate(180deg);}
+.occ-panel{display:none;position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--PD);border:1px solid rgba(184,138,45,.35);border-radius:10px;box-shadow:0 20px 50px -14px rgba(0,0,0,.6);z-index:60;max-height:360px;flex-direction:column;overflow:hidden;}
+.occ-panel.open{display:flex;}
+.occ-search-wrap{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid rgba(184,138,45,.2);flex-shrink:0;}
+.occ-search-wrap i{opacity:.5;font-size:11px;}
+.occ-search{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:inherit;font-size:12.5px;min-width:0;}
+.occ-search::placeholder{color:rgba(255,255,255,.4);}
+.occ-list{overflow-y:auto;padding:6px;scrollbar-width:thin;scrollbar-color:rgba(184,138,45,.3) transparent;}
+.occ-recent-row{display:flex;flex-wrap:wrap;gap:6px;padding:4px 8px 10px;border-bottom:1px solid rgba(184,138,45,.15);margin-bottom:4px;}
+.occ-recent-chip{background:rgba(184,138,45,.15);border:1px solid rgba(184,138,45,.3);color:var(--GL);font-size:10.5px;padding:4px 10px;border-radius:20px;cursor:pointer;transition:.15s;}
+.occ-recent-chip:hover{background:rgba(184,138,45,.28);}
+.occ-group-label{font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--G);padding:9px 8px 4px;}
+.occ-option{padding:8px 10px;border-radius:7px;font-size:12.5px;color:rgba(255,255,255,.85);cursor:pointer;transition:.12s;}
+.occ-option:hover,.occ-option.hi{background:rgba(184,138,45,.2);color:#fff;}
+.occ-option.sel{color:var(--GL);font-weight:700;}
+.occ-empty{padding:18px 12px;text-align:center;font-size:11px;opacity:.5;line-height:1.6;}
 
 /* ─────────────── ROSTER ─────────────── */
 .ros-add{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
@@ -259,7 +290,7 @@ select.ic option{background:var(--PD);color:#fff;}
 .cc{flex:1;padding:30px 38px 50px;display:flex;flex-direction:column;justify-content:space-between;position:relative;background:var(--cream);overflow:hidden;}
 .cc::before{content:'';position:absolute;top:14px;bottom:14px;left:14px;right:14px;border:1px solid rgba(11,61,46,.06);pointer-events:none;}
 .chr{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1;}
-.clogo{height:78px;width:auto;max-width:150px;object-fit:contain;}
+.clogo{height:140px;width:auto;max-width:260px;object-fit:contain;}
 .chm{text-align:right;}
 .csub{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--txm);}
 .cline{height:2px;width:46px;background:var(--G);margin-left:auto;margin-top:4px;}
@@ -267,7 +298,7 @@ select.ic option{background:var(--PD);color:#fff;}
 /* Stacked layout (square + story) */
 .card.fmt-square,.card.fmt-story{display:flex;flex-direction:column;}
 .sk-head{display:flex;justify-content:space-between;align-items:center;padding:13px 22px 11px;border-bottom:1px solid rgba(184,138,45,.25);flex-shrink:0;position:relative;z-index:2;background:var(--cream);}
-.sk-head .clogo{height:54px;}
+.sk-head .clogo{height:100px;}
 .sk-htxt{text-align:right;}
 .sk-htxt .t{font-family:'Playfair Display',serif;font-size:15px;color:var(--P);letter-spacing:.4px;}
 .sk-htxt .s{font-size:7.5px;letter-spacing:2px;color:var(--txm);text-transform:uppercase;margin-top:2px;}
@@ -288,9 +319,9 @@ select.ic option{background:var(--PD);color:#fff;}
 .fmt-square .ctitle{font-size:27px;margin:7px 0;}
 .fmt-story .ctitle{font-size:30px;margin:10px 0;}
 .cmsg{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--txm);position:relative;z-index:1;}
-.fmt-landscape .cmsg{font-size:13.5px;line-height:1.58;}
-.fmt-square .cmsg{font-size:15px;line-height:1.6;}
-.fmt-story .cmsg{font-size:17px;line-height:1.62;}
+.fmt-landscape .cmsg{font-size:22px;line-height:1.45;}
+.fmt-square .cmsg{font-size:24px;line-height:1.45;}
+.fmt-story .cmsg{font-size:27px;line-height:1.45;}
 .csig{border-top:1.5px solid rgba(184,138,45,.3);padding-top:9px;position:relative;z-index:1;}
 .fmt-square .csig,.fmt-story .csig{display:inline-block;border-top:none;}
 .csig-n{font-weight:700;font-size:11px;color:var(--P);text-transform:uppercase;letter-spacing:.5px;}
@@ -325,10 +356,34 @@ select.ic option{background:var(--PD);color:#fff;}
 .toast.err{border-color:#e74c3c;background:#2c0808;}
 .toast.ok{border-color:#3fae6a;}
 
+html{overflow-x:hidden;width:100%;}
+
 @media(max-width:980px){
-  .shell{grid-template-columns:1fr;}
-  .sidebar{height:auto;position:static;}
-  .main{min-height:auto;padding:22px 16px 30px;}
+  .shell{grid-template-columns:minmax(0,1fr);}
+  .sidebar,.main{min-width:0;max-width:100%;}
+  .sidebar{height:auto;position:static;order:2;}
+  .main{min-height:auto;padding:18px 16px 24px;order:1;overflow-x:hidden;}
+  .sidebar *{min-width:0;}
+  #stage{overflow:hidden;max-width:100%;}
+  #fitbox{max-width:100%;}
+  .actionbar{
+    position:sticky;bottom:0;z-index:50;
+    background:var(--app-bg);
+    margin:10px -16px -24px;
+    padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));
+    box-shadow:0 -10px 24px -12px rgba(0,0,0,.55);
+  }
+}
+@media(max-width:480px){
+  .sidebar{padding:18px 14px;}
+  .brand-name{font-size:18px;letter-spacing:1px;}
+  .brand-sub{letter-spacing:2px;}
+  .tab{font-size:9.5px;padding:9px 4px;letter-spacing:.6px;}
+  .tab i{font-size:10px;}
+  .ros-add{grid-template-columns:1fr;}
+  .bstack{grid-template-columns:1fr;}
+  .foot-note{font-size:9px;}
+  .actionbar .btn{min-width:0;flex:1 1 45%;}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 
@@ -364,9 +419,45 @@ select.ic option{background:var(--PD);color:#fff;}
 
     <!-- ───── COMPOSE PANEL ───── -->
     <div class="panel on" id="panel-compose">
+
+      <div class="sub-head">Who</div>
       <div class="fgrp">
-        <label for="fOcc">Occasion</label>
-        <select class="ic" id="fOcc">
+        <label>Recipient Name</label>
+        <div class="nrow">
+          <input type="text" class="ic" id="fName" placeholder="Enter name…" value="Team Member" maxlength="40" autocomplete="off">
+          <button class="ibtn" id="btnSave" title="Save name to quick list"><i class="fas fa-bookmark" style="font-size:12px"></i></button>
+        </div>
+        <div id="ctr" class="ctr">11 / 40</div>
+        <div class="chips" id="chips"></div>
+      </div>
+
+      <div class="fgrp">
+        <label for="fFrom">From / Sender</label>
+        <input type="text" class="ic" id="fFrom" value="People & Culture Team" autocomplete="off">
+      </div>
+
+      <div class="divider"></div>
+      <div class="sub-head">Occasion</div>
+      <div class="fgrp">
+        <label for="occSearch">Occasion</label>
+        <div class="occ-picker" id="occPicker">
+          <button type="button" class="occ-trigger" id="occTrigger" aria-haspopup="listbox" aria-expanded="false">
+            <span>
+              <span class="occ-cat" id="occTriggerCat">Employee Personal</span>
+              <span id="occTriggerLabel">Birthday Wishes</span>
+            </span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="occ-panel" id="occPanel">
+            <div class="occ-search-wrap">
+              <i class="fas fa-search"></i>
+              <input type="text" id="occSearch" class="occ-search" placeholder="Search 63 occasions…" autocomplete="off">
+            </div>
+            <div class="occ-list" id="occList"></div>
+          </div>
+        </div>
+        <!-- underlying source of truth — kept in sync with the picker above -->
+        <select class="ic" id="fOcc" style="display:none" aria-hidden="true" tabindex="-1">
           <optgroup label="Employee Personal">
             <option value="birthday" selected>Birthday Wishes</option>
             <option value="workAnniversary">Work Anniversary</option>
@@ -447,72 +538,29 @@ select.ic option{background:var(--PD);color:#fff;}
         </select>
       </div>
 
-      <div class="fgrp" id="grpYrs" style="display:none">
-        <label for="fYrs">Years Completed</label>
-        <input type="number" id="fYrs" class="ic" min="1" max="50" value="1">
-      </div>
-
-      <div class="fgrp" id="grpBdayMult" style="display:none">
-        <label for="fBdayMult"><i class="fas fa-users" style="font-size:9px;margin-right:4px"></i>Birthday Multiple</label>
-        <select class="ic" id="fBdayMult">
-          <option value="1">Single Birthday</option>
-          <option value="2">2 Birthdays</option>
-          <option value="3">3 Birthdays</option>
-          <option value="4">4 Birthdays</option>
-          <option value="5">5 Birthdays</option>
-        </select>
-      </div>
+      <details class="adv-details" id="advDetails" style="display:none">
+        <summary>Advanced Options</summary>
+        <div class="adv-body">
+          <div class="fgrp" id="grpYrs" style="display:none">
+            <label for="fYrs">Years Completed</label>
+            <input type="number" id="fYrs" class="ic" min="1" max="50" value="1">
+          </div>
+          <div class="fgrp" id="grpBdayMult" style="display:none">
+            <label for="fBdayMult"><i class="fas fa-users" style="font-size:9px;margin-right:4px"></i>Birthday Multiple</label>
+            <select class="ic" id="fBdayMult">
+              <option value="1">Single Birthday</option>
+              <option value="2">2 Birthdays</option>
+              <option value="3">3 Birthdays</option>
+              <option value="4">4 Birthdays</option>
+              <option value="5">5 Birthdays</option>
+            </select>
+          </div>
+        </div>
+      </details>
       <div id="grpBdayPersons"></div>
 
-      <div class="fgrp" id="grpPhotoShape" style="display:none">
-        <label><i class="fas fa-crop-simple" style="font-size:9px;margin-right:4px"></i>Photo Shape</label>
-        <div class="seg" id="pshapeBar">
-          <button class="seg-btn on" data-shape="circle"><i class="fas fa-circle" style="font-size:9px"></i> Round</button>
-          <button class="seg-btn" data-shape="square"><i class="far fa-square" style="font-size:10px"></i> Square</button>
-        </div>
-      </div>
-
-      <div class="fgrp" id="grpPhotoSize" style="display:none">
-        <label><i class="fas fa-up-right-and-down-left-from-center" style="font-size:9px;margin-right:4px"></i>Photo Size <span class="hint" id="psizeVal">115%</span></label>
-        <input type="range" id="fPhotoSize" class="rng" min="0.8" max="1.6" step="0.05" value="1.15">
-      </div>
-
-      <div class="fgrp" id="grpMood" style="display:none">
-        <label><i class="fas fa-palette" style="font-size:9px;margin-right:4px"></i>Birthday Mood</label>
-        <div class="mood-row" id="moodRow"></div>
-      </div>
-
-      <div class="fgrp" id="grpAccent2" style="display:none">
-        <label><i class="fas fa-wand-magic-sparkles" style="font-size:9px;margin-right:4px"></i>Photo Accent</label>
-        <div class="seg" id="paccBar">
-          <button class="seg-btn on" data-acc="none">None</button>
-          <button class="seg-btn" data-acc="laurel"><i class="fas fa-award" style="font-size:9px"></i> Laurel</button>
-          <button class="seg-btn" data-acc="hat"><i class="fas fa-hat-wizard" style="font-size:9px"></i> Party Hat</button>
-          <button class="seg-btn" data-acc="sparkle"><i class="fas fa-star" style="font-size:9px"></i> Sparkle</button>
-        </div>
-      </div>
-
-      <div class="fgrp" id="grpNote" style="display:none">
-        <label><i class="fas fa-feather" style="font-size:9px;margin-right:4px"></i>Personal Note <span class="hint">optional</span></label>
-        <input type="text" class="ic" id="fNote" placeholder="e.g. Here's to another amazing year, Priya!" maxlength="90">
-        <div class="note-hint">Shown as a personal line above the main message.</div>
-      </div>
-
-      <div class="fgrp">
-        <label>Recipient Name</label>
-        <div class="nrow">
-          <input type="text" class="ic" id="fName" placeholder="Enter name…" value="Team Member" maxlength="40" autocomplete="off">
-          <button class="ibtn" id="btnSave" title="Save name to quick list"><i class="fas fa-bookmark" style="font-size:12px"></i></button>
-        </div>
-        <div id="ctr" class="ctr">11 / 40</div>
-        <div class="chips" id="chips"></div>
-      </div>
-
-      <div class="fgrp">
-        <label for="fFrom">From / Sender</label>
-        <input type="text" class="ic" id="fFrom" value="People & Culture Team" autocomplete="off">
-      </div>
-
+      <div class="divider"></div>
+      <div class="sub-head">Message</div>
       <div class="fgrp">
         <label for="fTone">Message Tone</label>
         <select class="ic" id="fTone">
@@ -528,8 +576,33 @@ select.ic option{background:var(--PD);color:#fff;}
       </div>
 
       <div class="fgrp">
-        <label for="fMsg">Custom Message <span class="hint">(optional — overrides auto-text)</span></label>
-        <textarea class="ic" id="fMsg" rows="3" placeholder="Leave blank to use the auto-generated message…"></textarea>
+        <label for="fMsg">Message <span class="hint">auto-generated — edit anytime</span></label>
+        <textarea class="ic" id="fMsg" rows="4" placeholder="Your message will appear here…"></textarea>
+      </div>
+
+      <div class="divider" id="lookDivider" style="display:none"></div>
+      <div class="sub-head" id="lookHead" style="display:none">Look</div>
+      <div class="fgrp" id="grpPhotoShape" style="display:none">
+        <label><i class="fas fa-crop-simple" style="font-size:9px;margin-right:4px"></i>Photo Shape</label>
+        <div class="seg" id="pshapeBar">
+          <button class="seg-btn on" data-shape="circle"><i class="fas fa-circle" style="font-size:9px"></i> Round</button>
+          <button class="seg-btn" data-shape="square"><i class="far fa-square" style="font-size:10px"></i> Square</button>
+        </div>
+      </div>
+
+      <div class="fgrp" id="grpMood" style="display:none">
+        <label><i class="fas fa-palette" style="font-size:9px;margin-right:4px"></i>Birthday Mood</label>
+        <div class="mood-row" id="moodRow"></div>
+      </div>
+
+      <div class="fgrp" id="grpAccent2" style="display:none">
+        <label><i class="fas fa-wand-magic-sparkles" style="font-size:9px;margin-right:4px"></i>Photo Accent</label>
+        <div class="seg" id="paccBar">
+          <button class="seg-btn on" data-acc="none">None</button>
+          <button class="seg-btn" data-acc="laurel"><i class="fas fa-award" style="font-size:9px"></i> Laurel</button>
+          <button class="seg-btn" data-acc="hat"><i class="fas fa-hat-wizard" style="font-size:9px"></i> Party Hat</button>
+          <button class="seg-btn" data-acc="sparkle"><i class="fas fa-star" style="font-size:9px"></i> Sparkle</button>
+        </div>
       </div>
     </div>
 
@@ -634,10 +707,10 @@ select.ic option{background:var(--PD);color:#fff;}
     </div>
 
     <div class="actionbar" id="actionbar" style="display:none">
-      <button class="btn btn-p" id="btnPNG"><i class="fas fa-download"></i> Export PNG</button>
+      <button class="btn btn-wa" id="btnWA"><i class="fab fa-whatsapp"></i> Share via WhatsApp</button>
+      <button class="btn btn-p" id="btnPNG"><i class="fas fa-download"></i> Download PNG</button>
       <button class="btn btn-s" id="btnClip"><i class="fas fa-copy"></i> Copy Image</button>
       <button class="btn btn-s" id="btnPrint"><i class="fas fa-print"></i> Print / PDF</button>
-      <button class="btn btn-wa" id="btnWA"><i class="fab fa-whatsapp"></i> Share via WhatsApp</button>
     </div>
 
     <div class="recents" id="recents" style="display:none">
@@ -1577,9 +1650,9 @@ const $ = id => document.getElementById(id);
 const shell=$('shell'), blogo=$('blogo'), logoFile=$('logoFile'), logoPrev=$('logoPrev'),
   logoDrop=$('logoDrop'), logoDropTxt=$('logoDropTxt'), btnClrLogo=$('btnClrLogo'),
   fOcc=$('fOcc'), fYrs=$('fYrs'), grpYrs=$('grpYrs'), fBdayMult=$('fBdayMult'),
-  grpBdayMult=$('grpBdayMult'), grpBdayPersons=$('grpBdayPersons'),
+  grpBdayMult=$('grpBdayMult'), grpBdayPersons=$('grpBdayPersons'), advDetails=$('advDetails'),
   fName=$('fName'), ctrEl=$('ctr'), btnSave=$('btnSave'), chipsEl=$('chips'),
-  fFrom=$('fFrom'), fTone=$('fTone'), fEmoji=$('fEmoji'), fMsg=$('fMsg'), fNote=$('fNote'),
+  fFrom=$('fFrom'), fTone=$('fTone'), fEmoji=$('fEmoji'), fMsg=$('fMsg'),
   fmtbar=$('fmtbar'), fmtDims=$('fmtDims'),
   stage=$('stage'), emptyState=$('emptyState'), actionbar=$('actionbar'),
   btnPNG=$('btnPNG'), btnClip=$('btnClip'), btnPrint=$('btnPrint'), btnWA=$('btnWA'),
@@ -1605,14 +1678,17 @@ let history_   = readJSON('hrc_hist', []);
 let savedNames = readJSON('hrc_names', []);
 let roster     = readJSON('hrc_roster', []);
 let logoB64    = LS.get('hrc_logo') || '';
-let logoDirectSrc = '';
+// built-in default AIS Windows logo — colour (light backgrounds) + white (dark backgrounds)
+let defLogoColorB64 = '', defLogoWhiteB64 = '';
+const DEF_LOGO_COLOR = 'Logo05.png', DEF_LOGO_WHITE = 'Logo05-white.png';
 let currentFormat = LS.get('hrc_fmt') || 'landscape';
 let currentTheme  = LS.get('hrc_theme') || '1';
 let accentColor   = LS.get('hrc_accent') || '';
 let photoShape    = LS.get('hrc_pshape') || 'circle';
-let photoScale    = parseFloat(LS.get('hrc_pscale')) || 1.15;
+const photoScale  = 1.15;               // fixed — photos auto-fit, no manual sizing needed
 let bdayMood      = LS.get('hrc_mood') || 'classic';
 let photoAccent   = LS.get('hrc_pacc') || 'none';
+let msgDirty      = false;              // true once the HR user hand-edits the message field
 let toastTmr = null, html2cvLoaded = false, previewTmr = null;
 const bdayPhotoData = {};               // {0..4}: {src,name,dept}
 if(!FMT_OK(currentFormat)) currentFormat = 'landscape';
@@ -1705,37 +1781,44 @@ function applyAccent(){
     document.documentElement.style.removeProperty('--GL');
   }
 }
+// Brand logo: a custom upload always wins. Otherwise the built-in AIS Windows
+// logo is used automatically — colour variant on light backgrounds, white on dark —
+// so HR never has to upload anything to get a working brand mark.
+function logoForBg(dark){
+  if(logoB64) return logoB64;                          // custom upload — used as-is everywhere
+  return dark ? (defLogoWhiteB64 || DEF_LOGO_WHITE) : (defLogoColorB64 || DEF_LOGO_COLOR);
+}
 function applyLogo(){
-  const src = logoB64 || logoDirectSrc;
-  if(src){
-    blogo.src=src; blogo.style.display='block';
-    logoPrev.src=src; logoPrev.style.display='block';
+  const sideSrc = logoForBg(true);   // sidebar sits on a dark panel
+  const prevSrc = logoB64 || defLogoColorB64 || DEF_LOGO_COLOR; // Brand-tab preview chip is light
+  if(sideSrc){ blogo.src=sideSrc; blogo.style.display='block'; } else blogo.style.display='none';
+  if(prevSrc){
+    logoPrev.src=prevSrc; logoPrev.style.display='block';
     logoDropTxt.style.display='none';
-    btnClrLogo.style.display='block';
   } else {
-    blogo.style.display='none';
     logoPrev.style.display='none';
     logoDropTxt.style.display='block';
-    btnClrLogo.style.display='none';
   }
+  btnClrLogo.style.display = logoB64 ? 'block' : 'none';
 }
 
-// auto-detect a logo sitting next to the file (keeps the v2 behaviour)
-const LOGO_CANDIDATES=['Logo05.png','Logo05.PNG','Logo05.JPG','logo05.png','Logo5.png','Logo5.PNG','logo.png','Logo.png'];
-function tryAutoLoadLogo(idx){
-  if(idx>=LOGO_CANDIDATES.length){ applyLogo(); return; }
-  const img=new Image();
-  img.onload=()=>{
-    const cvs=document.createElement('canvas');
-    cvs.width=img.naturalWidth; cvs.height=img.naturalHeight;
-    cvs.getContext('2d').drawImage(img,0,0);
-    try{ logoB64=cvs.toDataURL('image/png'); LS.set('hrc_logo',logoB64); applyLogo(); refreshPreview(); }
-    catch(e){ logoDirectSrc=LOGO_CANDIDATES[idx]; applyLogo(); refreshPreview(); }
+// preload the two built-in logo assets that ship with the app (no upload required)
+function loadDefaultLogos(){
+  const load=(path, onOk)=>{
+    const img=new Image();
+    img.onload=()=>{
+      try{
+        const cvs=document.createElement('canvas');
+        cvs.width=img.naturalWidth; cvs.height=img.naturalHeight;
+        cvs.getContext('2d').drawImage(img,0,0);
+        onOk(cvs.toDataURL('image/png'));
+      }catch(e){ /* CORS-tainted canvas — direct path fallback already in DEF_LOGO_* */ }
+    };
+    img.src=path;
   };
-  img.onerror=()=>tryAutoLoadLogo(idx+1);
-  img.src=LOGO_CANDIDATES[idx];
+  load(DEF_LOGO_COLOR, b64=>{ defLogoColorB64=b64; applyLogo(); refreshPreview(); });
+  load(DEF_LOGO_WHITE, b64=>{ defLogoWhiteB64=b64; applyLogo(); refreshPreview(); });
 }
-logoDirectSrc='Logo05.PNG';   // optimistic default for local use
 
 /* ========================================================
    STATE COLLECTION
@@ -1758,7 +1841,6 @@ function collectState(){
     photoScale: photoScale,
     bdayMood: bdayMood,
     photoAccent: photoAccent,
-    personalNote: (fNote && occ==='birthday') ? fNote.value.trim() : '',
   };
 }
 
@@ -1766,9 +1848,9 @@ function collectState(){
    CARD COMPOSITION HELPERS
    ======================================================== */
 function logoImg(cls){
-  const src = logoB64 || logoDirectSrc;
+  const src = logoForBg(false);   // card headers sit on a light (cream) background
   return src
-    ? `<img class="${cls}" src="${src}" alt="HR" crossorigin="anonymous" onerror="this.style.display='none'">`
+    ? `<img class="${cls}" src="${src}" alt="Company logo" crossorigin="anonymous" onerror="this.style.display='none'">`
     : `<div class="${cls}" style="display:flex;align-items:center;font-family:'Playfair Display',serif;font-weight:700;color:var(--P);font-size:20px;letter-spacing:.3px;">HR&nbsp;Connect</div>`;
 }
 function tagOf(s){ const t=T[s.occasion]||T.birthday; return t.tag||''; }
@@ -1794,7 +1876,7 @@ function cardVisual(s){
   if(s.occasion==='birthday' && s.bdayCount===1){ const p=(s.singlePhoto!==undefined?s.singlePhoto:singleBdayPhoto()); if(p) return `<img src="${p}" alt="">`; }
   return getVisual(s.occasion);
 }
-const FOOT = `<div class="cfoot"><span>Excellence in Every Detail</span>&nbsp;·&nbsp;<span>Since 1987</span></div>`;
+const FOOT = ''; // no hard-coded organisation tagline baked into the artwork — the logo alone carries brand identity
 const SEAL = `<div class="seal"><div class="seal-inner">HR<br>✦<br>Connect</div></div>`;
 
 /* ── LANDSCAPE ── */
@@ -1810,16 +1892,16 @@ function buildLandscape(s){
       <h1 class="ctitle">${composeTitle(s)}</h1>
       <p class="cmsg">${composeMsg(s)}</p>
     </div>
-    <div class="csig"><div class="csig-n">${san(s.from)}</div><div class="csig-d">AIS WINDOWS · ASAHI INDIA GLASS LTD.</div></div>
+    <div class="csig"><div class="csig-n">${san(s.from)}</div></div>
   </div>
   ${SEAL}${FOOT}`;
 }
 
 /* ── SQUARE / STORY (stacked) ── */
 function buildStacked(s){
-  const vH = s.format==='square' ? 248 : 300;
+  const vH = s.format==='square' ? 216 : 300; // trimmed slightly to make room for the larger header logo and message text
   return `
-  <div class="sk-head">${logoImg('clogo')}<div class="sk-htxt"><div class="t">HR Connect</div><div class="s">People &amp; Culture · AIS</div></div></div>
+  <div class="sk-head">${logoImg('clogo')}<div class="sk-htxt"><div class="t">HR Connect</div><div class="s">People &amp; Culture</div></div></div>
   <div class="sk-visual" style="height:${vH}px">${cardVisual(s)}<div class="cv-ov"></div><div class="sk-vtag">${san(tagOf(s))}</div></div>
   <div class="sk-body">
     <div class="crcp">Dear ${san(s.name)},</div>
@@ -1827,7 +1909,7 @@ function buildStacked(s){
     <h1 class="ctitle">${composeTitle(s)}</h1>
     <p class="cmsg">${composeMsg(s)}</p>
   </div>
-  <div class="sk-foot"><div class="csig"><div class="csig-n">${san(s.from)}</div><div class="csig-d">AIS WINDOWS · ASAHI INDIA GLASS LTD.</div></div></div>
+  <div class="sk-foot"><div class="csig"><div class="csig-n">${san(s.from)}</div></div></div>
   ${SEAL}${FOOT}`;
 }
 
@@ -1853,11 +1935,11 @@ const BDAY_MOODS = {
     balloons:[{c:'#9b8bd6',hl:'#d9d0f5'},{c:'#8bc9c0',hl:'#c9ede8'},{c:'#f0b8cf',hl:'#fbe0ea'}] },
 };
 
-function logoImgSized(px, ink){
-  const src = logoB64 || logoDirectSrc;
+function logoImgSized(px, ink, dark){
+  const src = logoForBg(!!dark);
   return src
-    ? `<img src="${src}" alt="AIS Windows" crossorigin="anonymous" style="height:${px}px;width:auto;max-width:${Math.round(px*2.4)}px;object-fit:contain;display:block;" onerror="this.style.display='none'">`
-    : `<div style="font-family:'Playfair Display',serif;font-weight:700;color:${ink};font-size:${Math.round(px*0.34)}px;letter-spacing:.3px;">AIS&nbsp;Windows</div>`;
+    ? `<img src="${src}" alt="Company logo" crossorigin="anonymous" style="height:${px}px;width:auto;max-width:${Math.round(px*2.4)}px;object-fit:contain;display:block;" onerror="this.style.display='none'">`
+    : `<div style="font-family:'Playfair Display',serif;font-weight:700;color:${ink};font-size:${Math.round(px*0.34)}px;letter-spacing:.3px;">HR&nbsp;Connect</div>`;
 }
 
 // elegant cake placeholder (no photo)
@@ -2034,21 +2116,19 @@ function buildBirthdayCard(s, spec){
   const clampN = (v,lo,hi)=>Math.max(lo,Math.min(hi,v));
 
   const pad = (fmt==='landscape') ? '54px 34px 44px' : (fmt==='square' ? '58px 36px 46px' : '60px 40px 48px');
-  const headerBottom = (fmt==='landscape') ? 100 : (fmt==='square' ? 110 : 112); // pad-top + logo height, so decor never crosses the logo/stamp row
-  const msgPx = fmt==='story'?17 : fmt==='square'?15.5 : 13.5;
+  const logoPx = fmt==='landscape' ? 76 : 86;                              // ~1.65x the original 46/52 — a stronger brand mark, sized to still fit long content
+  const headerBottom = (fmt==='landscape') ? (54+logoPx) : (fmt==='square' ? (58+logoPx) : (60+logoPx)); // pad-top + logo height, so decor never crosses the logo/stamp row
+  const msgPx = fmt==='story'?26 : fmt==='square'?24 : 21;                 // ~1.5x, kept below the name/script sizes so hierarchy holds and long messages still fit
+  const deptPx = fmt==='story'?24 : fmt==='square'?22 : 20;                // ~1.6x, kept below the name size
   const flourish = `<span style="display:inline-block;width:26px;height:1.5px;background:${mood.accent};vertical-align:middle;margin:0 9px;opacity:.7;"></span>`;
 
   const header = `<div style="display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2;">
-      ${logoImgSized(fmt==='landscape'?46:52, mood.ink)}
+      ${logoImgSized(logoPx, mood.ink, mood.dark)}
       <div style="text-align:right;">
         <div style="font-family:'Playfair Display',serif;font-size:14px;color:${mood.ink};line-height:1;">HR Connect</div>
-        <div style="font-size:7.5px;letter-spacing:2px;color:${mood.sub};text-transform:uppercase;margin-top:3px;">People &amp; Culture · AIS</div>
+        <div style="font-size:7.5px;letter-spacing:2px;color:${mood.sub};text-transform:uppercase;margin-top:3px;">People &amp; Culture</div>
       </div>
     </div>`;
-
-  const noteHTML = s.personalNote ? `<div style="margin:10px auto 0;max-width:${fmt==='landscape'?480:420}px;padding:9px 16px;border-left:2.5px solid ${mood.accent};background:${mood.dark?'rgba(255,255,255,.06)':'rgba(255,255,255,.5)'};border-radius:0 8px 8px 0;text-align:left;">
-      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:${msgPx+1.5}px;line-height:1.5;color:${mood.ink};margin:0;">${san(s.personalNote)}</p>
-    </div>` : '';
 
   let centre;
   if(multi){
@@ -2060,7 +2140,7 @@ function buildBirthdayCard(s, spec){
         ${photoBlock(p.src, cell, shape, mood, accKind)}
         <div style="text-align:center;line-height:1.18;">
           <div style="font-family:'Playfair Display',serif;font-size:14px;color:${mood.ink};">${san(p.name||'')}</div>
-          ${p.dept?`<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:10.5px;color:${mood.sub};margin-top:1px;">${san(p.dept)}</div>`:''}
+          ${p.dept?`<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:${mood.sub};margin-top:2px;">${san(p.dept)}</div>`:''}
         </div>
       </div>`).join('');
     centre = `<div style="text-align:center;">
@@ -2069,24 +2149,23 @@ function buildBirthdayCard(s, spec){
       </div>
       <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;gap:14px 20px;margin:14px 0;">${cells}</div>`;
   } else {
-    let size = fmt==='story'?198 : fmt==='square'?172 : 150;
-    size = clampN(Math.round(size*scale), 110, fmt==='landscape'?202 : fmt==='square'?246 : 300);
+    let size = fmt==='story'?160 : fmt==='square'?132 : 122;
+    size = clampN(Math.round(size*scale), 95, fmt==='landscape'?165 : fmt==='square'?195 : 245);
     const namePx = fmt==='story'?37 : fmt==='square'?33 : 29;
     const scriptPx = fmt==='story'?52 : fmt==='square'?46 : 40;
     centre = `<div style="text-align:center;">
-        <h1 style="font-family:'Great Vibes',cursive;font-weight:400;font-size:${scriptPx}px;line-height:1;color:${mood.accent};margin:0 0 6px;">Happy Birthday!</h1>
-        <div style="display:flex;justify-content:center;margin:8px 0 14px;">${photoBlock(s.singlePhoto, size, shape, mood, accKind)}</div>
+        <h1 style="font-family:'Great Vibes',cursive;font-weight:400;font-size:${scriptPx}px;line-height:1;color:${mood.accent};margin:0 0 4px;">Happy Birthday!</h1>
+        <div style="display:flex;justify-content:center;margin:4px 0 8px;">${photoBlock(s.singlePhoto, size, shape, mood, accKind)}</div>
         <h2 style="font-family:'Playfair Display',serif;font-weight:700;font-size:${namePx}px;line-height:1.06;color:${mood.ink};margin:0;">${san(s.name)}</h2>
-        ${s.singleDept?`<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:${mood.sub};margin-top:5px;">${san(s.singleDept)}</div>`:''}
+        ${s.singleDept?`<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:${deptPx}px;color:${mood.sub};margin-top:4px;">${san(s.singleDept)}</div>`:''}
       </div>`;
   }
 
-  const tail = `${noteHTML}
-      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:${msgPx}px;line-height:1.6;color:${mood.msg};max-width:${fmt==='landscape'?520:440}px;margin:14px auto 0;text-align:center;">${msg}</p>
-      <div style="text-align:center;margin-top:14px;">
-        <div style="display:inline-block;border-top:1.5px solid ${mood.accent}66;padding-top:8px;">
+  const tail = `
+      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:${msgPx}px;line-height:1.28;color:${mood.msg};max-width:${fmt==='landscape'?600:(fmt==='square'?480:400)}px;margin:7px auto 0;text-align:center;">${msg}</p>
+      <div style="text-align:center;margin-top:6px;">
+        <div style="display:inline-block;border-top:1.5px solid ${mood.accent}66;padding-top:6px;">
           <div style="font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:${mood.ink};">${san(s.from)}</div>
-          <div style="font-size:8px;letter-spacing:1px;color:${mood.accent};font-weight:600;margin-top:2px;">AIS WINDOWS · ASAHI INDIA GLASS LTD.</div>
         </div>
       </div>`;
 
@@ -2264,8 +2343,26 @@ function histItem(s, action){
   return { occasion:s.occasion, name:s.name, from:s.from, tone:s.tone, customMsg:s.customMsg, emoji:s.emoji, years:s.years, format:s.format, bdayCount:s.bdayCount, tag:tagOf(s), action:action||'', ts:Date.now() };
 }
 
-btnPNG.onclick=async()=>{
+/* ── friendly validation before a card leaves the app ── */
+function validateForExport(s){
+  if(s.occasion==='birthday' && s.bdayCount>1){
+    const hasName = getBdayPersons(s.bdayCount).some(p=>p.name);
+    if(!hasName) return { ok:false, message:"Please add at least one team member's name before sharing this greeting." };
+    return { ok:true };
+  }
+  const nm=(fName.value||'').trim();
+  if(!nm || nm==='Team Member') return { ok:false, message:"Please enter the recipient's name before sharing this greeting." };
+  return { ok:true };
+}
+function guardExport(){
   const s=collectState();
+  const v=validateForExport(s);
+  if(!v.ok){ toast_(v.message,'err'); fName.focus(); return null; }
+  return s;
+}
+
+btnPNG.onclick=async()=>{
+  const s=guardExport(); if(!s) return;
   loader.classList.add('on'); setProgress(20,'Rendering high-resolution card…');
   try{
     const canvas=await rasterize(buildCard(s), FMT[s.format]);
@@ -2277,7 +2374,7 @@ btnPNG.onclick=async()=>{
   finally{ setProgress(100); setTimeout(()=>{loader.classList.remove('on');setProgress(0);},350); }
 };
 btnClip.onclick=async()=>{
-  const s=collectState();
+  const s=guardExport(); if(!s) return;
   if(!navigator.clipboard || !window.ClipboardItem){ toast_('Image copy isn\'t supported in this browser — use Download.','err'); return; }
   loader.classList.add('on'); setProgress(25,'Preparing image…');
   try{
@@ -2289,15 +2386,18 @@ btnClip.onclick=async()=>{
   }catch(e){ toast_('Copy failed — try Download instead.','err'); }
   finally{ setProgress(100); setTimeout(()=>{loader.classList.remove('on');setProgress(0);},350); }
 };
-btnPrint.onclick=()=>{ if(!$('card')) renderPreview(); setTimeout(()=>window.print(),140); };
+btnPrint.onclick=()=>{
+  const s=guardExport(); if(!s) return;
+  if(!$('card')) renderPreview(); setTimeout(()=>window.print(),140);
+};
 btnWA.onclick=()=>{
-  const s=collectState();
+  const s=guardExport(); if(!s) return;
   const t=T[s.occasion]||T.birthday;
   let who=s.name;
   if(s.occasion==='birthday' && s.bdayCount>1){ const names=getBdayPersons(s.bdayCount).map(p=>p.name).filter(Boolean); who=names.join(', ')||'Team'; }
   let body=s.customMsg ? s.customMsg : (t['msg'+s.tone]||t.msgFormal);
   if(!s.emoji) body=stripEmoji(body);
-  const txt='*'+occLabel(s.occasion)+'*\n\nDear '+who+',\n'+body+'\n\n— '+s.from+'\nAIS Windows · Asahi India Glass Ltd.';
+  const txt='*'+occLabel(s.occasion)+'*\n\nDear '+who+',\n'+body+'\n\n— '+s.from;
   window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
   saveHist(histItem(s,'WhatsApp'));
 };
@@ -2350,12 +2450,12 @@ function loadHist(i){
   const h=history_[i]; if(!h) return;
   fOcc.value=h.occasion;
   if(h.occasion==='birthday'){ fBdayMult.value=String(h.bdayCount||1); }
-  onOccasionChange();
+  fTone.value = h.tone || 'Formal';
+  fEmoji.checked = h.emoji!==false;
+  onOccasionChange();   // resets the message to this occasion/tone's auto-text
   fName.value = (h.name && h.name!=='Team Member') ? h.name : '';
   fFrom.value = (h.from && h.from!=='People & Culture Team') ? h.from : '';
-  fTone.value = h.tone || 'Formal';
-  fMsg.value  = h.customMsg || '';
-  fEmoji.checked = h.emoji!==false;
+  if(h.customMsg){ fMsg.value=h.customMsg; msgDirty=true; }
   if(h.occasion==='workAnniversary') fYrs.value = h.years || 1;
   if(FMT_OK(h.format)) setFormat(h.format);
   updateCounter(); switchTab('compose'); renderPreview();
@@ -2383,11 +2483,15 @@ function renderRoster(){
     if(p.dept) bits.push(san(p.dept));
     if(p.dob){ const l=monthDayLabel(p.dob); if(l) bits.push('B: '+l); }
     if(p.doj){ const l=monthDayLabel(p.doj); if(l) bits.push('J: '+l); }
-    return `<div class="ros-item"><div style="flex:1;min-width:0;"><div style="font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${san(p.name||'—')}</div><div style="font-size:9.5px;opacity:.55;margin-top:1px;">${bits.join(' · ')||'no dates'}</div></div><button data-del="${p.id}" title="Remove" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:12.5px;flex-shrink:0;"><i class="fas fa-trash"></i></button></div>`;
+    return `<div class="ros-item"><div style="flex:1;min-width:0;"><div style="font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${san(p.name||'—')}</div><div style="font-size:9.5px;opacity:.55;margin-top:1px;">${bits.join(' · ')||'no dates'}</div></div><button data-use="${p.id}" title="Create a greeting for this person" style="background:none;border:none;color:var(--GL);cursor:pointer;font-size:12px;flex-shrink:0;padding:2px 4px;"><i class="fas fa-pen-nib"></i></button><button data-del="${p.id}" title="Remove" style="background:none;border:none;color:rgba(255,255,255,.4);cursor:pointer;font-size:12.5px;flex-shrink:0;"><i class="fas fa-trash"></i></button></div>`;
   }).join('');
   [].forEach.call(rosListEl.querySelectorAll('[data-del]'),b=> b.onclick=()=>{
     roster=roster.filter(x=>String(x.id)!==String(b.dataset.del));
     persistRoster(); renderRoster(); renderCelebrations();
+  });
+  [].forEach.call(rosListEl.querySelectorAll('[data-use]'),b=> b.onclick=()=>{
+    const p=roster.find(x=>String(x.id)===String(b.dataset.use));
+    if(p) generateFromCelebration({ type:'bday', person:p });
   });
 }
 function getCelebrations(windowDays){
@@ -2400,22 +2504,27 @@ function getCelebrations(windowDays){
   return out;
 }
 function whenLabel(du){ return du===0?'Today':du===1?'Tmrw':'in '+du+'d'; }
+function celeRow(c, idx){
+  const icon=c.type==='bday'?'fa-cake-candles':'fa-briefcase';
+  const meta=c.type==='bday'
+    ? 'Birthday · '+fmtShortDate(c.date)
+    : (c.years>0 ? (c.years+(c.years===1?' year':' years')+' · '+fmtShortDate(c.date)) : 'Work anniversary · '+fmtShortDate(c.date));
+  return `<div class="cele${c.type==='bday'?' bday':' anniv'}" data-i="${idx}" title="Click to create this card"><div class="cele-ic"><i class="fas ${icon}"></i></div><div class="cele-body"><div class="cele-name">${san(c.person.name||'—')}</div><div class="cele-meta">${san(meta)}</div></div><div class="cele-when${c.daysUntil===0?' today':''}">${whenLabel(c.daysUntil)}</div></div>`;
+}
 function renderCelebrations(){
   const cele=getCelebrations(7);
   const todays=cele.filter(c=>c.daysUntil===0);
+  const upcoming=cele.filter(c=>c.daysUntil>0);
   btnBatchToday.style.display = todays.length>1 ? 'flex' : 'none';
   btnBatchToday.innerHTML='<i class="fas fa-bolt"></i>&nbsp; Export today\'s '+todays.length+' cards';
   if(!cele.length){
     celeListEl.innerHTML='<div class="cele-empty">No birthdays or anniversaries in the next 7 days.<br>Add your team in the list below.</div>';
     return;
   }
-  celeListEl.innerHTML=cele.map((c,idx)=>{
-    const icon=c.type==='bday'?'fa-cake-candles':'fa-briefcase';
-    const meta=c.type==='bday'
-      ? 'Birthday · '+fmtShortDate(c.date)
-      : (c.years>0 ? (c.years+(c.years===1?' year':' years')+' · '+fmtShortDate(c.date)) : 'Work anniversary · '+fmtShortDate(c.date));
-    return `<div class="cele" data-i="${idx}" title="Click to load this card"><div class="cele-ic"><i class="fas ${icon}"></i></div><div class="cele-body"><div class="cele-name">${san(c.person.name||'—')}</div><div class="cele-meta">${san(meta)}</div></div><div class="cele-when">${whenLabel(c.daysUntil)}</div></div>`;
-  }).join('');
+  let html='';
+  if(todays.length) html+=`<div class="mini-lbl" style="margin:2px 0 2px 2px;">Today — needs a greeting</div>`+todays.map((c,i)=>celeRow(c,i)).join('');
+  if(upcoming.length) html+=`<div class="mini-lbl" style="margin:${todays.length?10:2}px 0 2px 2px;">Coming up this week</div>`+upcoming.map((c,i)=>celeRow(c,todays.length+i)).join('');
+  celeListEl.innerHTML=html;
   [].forEach.call(celeListEl.querySelectorAll('.cele'),el=> el.onclick=()=>{ const c=cele[+el.dataset.i]; if(c) generateFromCelebration(c); });
 }
 function generateFromCelebration(c){
@@ -2526,18 +2635,33 @@ btnBatchToday.onclick=async()=>{
 /* ========================================================
    OCCASION · FORMAT · TABS · THEME · LOGO  (wiring)
    ======================================================== */
+function templateMsg(occ, tone, emoji){
+  const t=T[occ]||T.birthday;
+  let m=t['msg'+tone] || t.msgFormal;
+  if(!emoji) m=stripEmoji(m);
+  return m;
+}
+function refillAutoMessage(){
+  if(msgDirty) return;
+  fMsg.value = templateMsg(fOcc.value, fTone.value||'Formal', fEmoji.checked);
+}
 function onOccasionChange(){
   const occ=fOcc.value;
   grpYrs.style.display = (occ==='workAnniversary') ? '' : 'none';
   grpBdayMult.style.display = (occ==='birthday') ? '' : 'none';
+  const advOn = (occ==='workAnniversary' || occ==='birthday');
+  if(advDetails) advDetails.style.display = advOn ? '' : 'none';
   grpBdayPersons.style.display = (occ==='birthday') ? '' : 'none';
   const gps=$('grpPhotoShape'); if(gps) gps.style.display = (occ==='birthday') ? '' : 'none';
-  const gpz=$('grpPhotoSize'); if(gpz) gpz.style.display = (occ==='birthday') ? '' : 'none';
   const gpm=$('grpMood'); if(gpm) gpm.style.display = (occ==='birthday') ? '' : 'none';
   const gpa=$('grpAccent2'); if(gpa) gpa.style.display = (occ==='birthday') ? '' : 'none';
-  const gpn=$('grpNote'); if(gpn) gpn.style.display = (occ==='birthday') ? '' : 'none';
+  const lkH=$('lookHead'), lkD=$('lookDivider');
+  if(lkH) lkH.style.display = (occ==='birthday') ? '' : 'none';
+  if(lkD) lkD.style.display = (occ==='birthday') ? '' : 'none';
   if(occ==='birthday') buildBdayPersonFields(parseInt(fBdayMult.value,10)||1);
   else grpBdayPersons.innerHTML='';
+  msgDirty=false; refillAutoMessage();
+  updateOccTrigger();
 }
 function onBdayMultChange(){ buildBdayPersonFields(parseInt(fBdayMult.value,10)||1); }
 function setFormat(f){
@@ -2559,9 +2683,6 @@ function switchTab(name){
   [].forEach.call(document.querySelectorAll('#pshapeBar .seg-btn'),x=>x.classList.toggle('on',x===b));
   refreshPreview();
 });
-(function(){ const sl=$('fPhotoSize'), lab=$('psizeVal');
-  if(sl) sl.addEventListener('input',()=>{ photoScale=parseFloat(sl.value)||1; LS.set('hrc_pscale',String(photoScale)); if(lab) lab.textContent=Math.round(photoScale*100)+'%'; refreshPreview(); });
-})();
 
 /* birthday mood swatches */
 function renderMoodRow(){
@@ -2582,8 +2703,6 @@ function renderMoodRow(){
   [].forEach.call(document.querySelectorAll('#paccBar .seg-btn'),x=>x.classList.toggle('on',x===b));
   refreshPreview();
 });
-if(fNote) fNote.addEventListener('input', refreshPreview);
-
 fAccent.oninput=()=>{ accentColor=fAccent.value; LS.set('hrc_accent',accentColor); applyAccent(); refreshPreview(); };
 btnAccentReset.onclick=()=>{ accentColor=''; LS.del('hrc_accent'); applyAccent(); refreshPreview(); toast_('Accent reset to theme default.'); };
 
@@ -2595,18 +2714,102 @@ logoFile.onchange=e=>{
   r.onload=ev=>{ logoB64=ev.target.result; LS.set('hrc_logo',logoB64); applyLogo(); refreshPreview(); toast_('Logo updated.','ok'); };
   r.readAsDataURL(f);
 };
-btnClrLogo.onclick=()=>{ logoB64=''; LS.del('hrc_logo'); logoDirectSrc=''; applyLogo(); refreshPreview(); };
+btnClrLogo.onclick=()=>{
+  logoB64=''; LS.del('hrc_logo'); applyLogo(); refreshPreview();
+  toast_('Custom logo removed — using the default AIS Windows logo.','ok');
+};
 
 /* compose inputs → live preview */
-[fName,fFrom,fTone,fMsg,fYrs,fEmoji].forEach(el=>{
+[fName,fFrom,fYrs].forEach(el=>{
   if(!el) return;
   const ev=(el.tagName==='SELECT'||el.type==='checkbox')?'change':'input';
   el.addEventListener(ev, refreshPreview);
 });
+fTone.addEventListener('change', ()=>{ refillAutoMessage(); refreshPreview(); });
+fEmoji.addEventListener('change', ()=>{ refillAutoMessage(); refreshPreview(); });
+fMsg.addEventListener('input', ()=>{ msgDirty=true; refreshPreview(); });
+fMsg.addEventListener('blur', ()=>{ if(!fMsg.value.trim()){ msgDirty=false; refillAutoMessage(); refreshPreview(); } });
 fOcc.addEventListener('change', ()=>{ onOccasionChange(); refreshPreview(); });
 fBdayMult.addEventListener('change', ()=>{ onBdayMultChange(); refreshPreview(); });
 fName.addEventListener('input', updateCounter);
 window.addEventListener('resize', debounce(fitPreview,120));
+window.addEventListener('orientationchange', ()=>setTimeout(fitPreview,200));
+if(window.ResizeObserver){ new ResizeObserver(debounce(fitPreview,80)).observe(stage); }
+
+/* ========================================================
+   OCCASION PICKER — categorised + searchable combobox
+   (the native #fOcc select stays the source of truth; this
+   is purely a friendlier front-end for choosing its value)
+   ======================================================== */
+(function(){
+  const trigger=$('occTrigger'), triggerLabel=$('occTriggerLabel'), triggerCat=$('occTriggerCat'),
+        panel=$('occPanel'), search=$('occSearch'), list=$('occList');
+  if(!trigger || !panel) return;
+  const RECENT_KEY='hrc_recent_occ', RECENT_MAX=5;
+  let recent = readJSON(RECENT_KEY, []);
+  const groups = [].map.call(fOcc.querySelectorAll('optgroup'), g=>({
+    label:g.getAttribute('label'),
+    options:[].map.call(g.querySelectorAll('option'), o=>({value:o.value,text:o.textContent.trim()}))
+  }));
+  const allOptions = groups.reduce((a,g)=>a.concat(g.options),[]);
+
+  function rememberRecent(val){
+    recent = [val].concat(recent.filter(v=>v!==val)).slice(0,RECENT_MAX);
+    LS.set(RECENT_KEY, JSON.stringify(recent));
+  }
+  function renderList(filter){
+    const q=(filter||'').trim().toLowerCase();
+    let html='';
+    if(!q && recent.length){
+      const chips = recent.map(v=>{
+        const o=allOptions.find(x=>x.value===v); if(!o) return '';
+        return `<span class="occ-recent-chip" data-v="${o.value}">${san(o.text)}</span>`;
+      }).join('');
+      if(chips) html += `<div class="occ-recent-row">${chips}</div>`;
+    }
+    let anyMatch=false;
+    groups.forEach(g=>{
+      const opts = q ? g.options.filter(o=> o.text.toLowerCase().indexOf(q)>=0 || g.label.toLowerCase().indexOf(q)>=0) : g.options;
+      if(!opts.length) return;
+      anyMatch=true;
+      html += `<div class="occ-group-label">${san(g.label)}</div>`;
+      html += opts.map(o=>`<div class="occ-option${o.value===fOcc.value?' sel':''}" data-v="${o.value}">${san(o.text)}</div>`).join('');
+    });
+    if(!anyMatch) html += `<div class="occ-empty">No occasions match "${san(filter)}".<br>Try a different word.</div>`;
+    list.innerHTML = html;
+    [].forEach.call(list.querySelectorAll('[data-v]'), el=> el.onclick=()=> selectOcc(el.dataset.v));
+  }
+  function updateOccTriggerLocal(){
+    const opt = allOptions.find(o=>o.value===fOcc.value);
+    const grp = groups.find(g=>g.options.some(o=>o.value===fOcc.value));
+    if(triggerLabel) triggerLabel.textContent = opt ? opt.text : fOcc.value;
+    if(triggerCat) triggerCat.textContent = grp ? grp.label : '';
+  }
+  window.updateOccTrigger = updateOccTriggerLocal;
+  function selectOcc(val){
+    fOcc.value=val;
+    rememberRecent(val);
+    fOcc.dispatchEvent(new Event('change'));
+    closePanel();
+  }
+  function openPanel(){
+    panel.classList.add('open'); trigger.classList.add('open');
+    trigger.setAttribute('aria-expanded','true');
+    search.value=''; renderList('');
+    setTimeout(()=>search.focus(),10);
+  }
+  function closePanel(){
+    panel.classList.remove('open'); trigger.classList.remove('open');
+    trigger.setAttribute('aria-expanded','false');
+  }
+  trigger.onclick=()=> panel.classList.contains('open') ? closePanel() : openPanel();
+  search.addEventListener('input', ()=>renderList(search.value));
+  document.addEventListener('click', e=>{
+    if(!$('occPicker').contains(e.target)) closePanel();
+  });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') closePanel(); });
+  updateOccTriggerLocal();
+})();
 
 /* ========================================================
    INIT
@@ -2659,10 +2862,10 @@ function init(){
   applyTheme();
   setFormat(currentFormat);
   switchTab('compose');
-  if(logoB64) applyLogo(); else tryAutoLoadLogo(0);
+  applyLogo();          // paint immediately with direct-path fallbacks
+  loadDefaultLogos();   // then upgrade to base64 once the built-in assets load
   onOccasionChange();
   [].forEach.call(document.querySelectorAll('#pshapeBar .seg-btn'),b=>b.classList.toggle('on',b.dataset.shape===photoShape));
-  { const sl=$('fPhotoSize'), lab=$('psizeVal'); if(sl) sl.value=String(photoScale); if(lab) lab.textContent=Math.round(photoScale*100)+'%'; }
   renderMoodRow();
   [].forEach.call(document.querySelectorAll('#paccBar .seg-btn'),b=>b.classList.toggle('on',b.dataset.acc===photoAccent));
   renderChips(); renderRoster(); renderCelebrations(); renderHist();
